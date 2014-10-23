@@ -53,13 +53,13 @@ public class Aquarium extends JPanel {
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
-	private static final int NB_FISH = 9;
+	private static final int NB_FISH = 5;
 
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
-	private static final int NB_DORISFISH = 9;
+	private static final int NB_DORISFISH = 5;
 	
 	/**
 	 * Pixel data buffer for the Aquarium rendering
