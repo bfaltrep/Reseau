@@ -37,7 +37,7 @@ public class Main  {
 			//3 envoi ses poissons
 			
 		}
-
+/*
 		AquariumWindow animation = new AquariumWindow(aquarium);
 		animation.displayOnscreen();
 		
@@ -62,6 +62,6 @@ public class Main  {
 			mt.start();
 		}
 		serveur.close();
-
+*/
 	}
 }

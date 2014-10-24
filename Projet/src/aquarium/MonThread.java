@@ -36,7 +36,7 @@ public class MonThread extends Thread {
 			InputStream is = so.getInputStream();
 					
 			BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
-
+/*
 			while(true){
 				String str = br.readLine();
 				
@@ -70,7 +70,7 @@ public class MonThread extends Thread {
 					ps.flush();
 					
 				}
-			}
+			}*/
 			so.close();
 			
 		} catch (IOException e){
