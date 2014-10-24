@@ -24,6 +24,7 @@ public class Main  {
 		//gestion multi
 		
 		ServerSocket serveur = new ServerSocket();
+		
 		serveur.setReuseAddress(true);
 		serveur.bind(new InetSocketAddress(8888));
 
@@ -35,7 +36,7 @@ public class Main  {
 				set.add(s);
 			}
 			
-			mt = new MonThread(s,set);
+			mt = new MonThread(s,set, aquarium);
 			if(mt == null)
 				break;
 			mt.start();

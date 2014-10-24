@@ -10,13 +10,18 @@ import java.net.Socket;
 import java.util.Iterator;
 import java.util.Set;
 
+import aquarium.gui.Aquarium;
+
 public class MonThread extends Thread {
 	Socket so;
 	Set set;
+	Aquarium aqua;
 	
-	public MonThread(Socket s,Set t){
+	
+	public MonThread(Socket s,Set t, Aquarium a){
 		so = s;
 		set = t;
+		aqua = a;
 	}
 	
 	public void run(){
@@ -36,15 +41,24 @@ public class MonThread extends Thread {
 				}else{
 					System.out.println("> "+str);
 				}
-								
+				
+
 				while(it.hasNext()){
 					
 					so = (Socket)it.next();
+					
+					
+					
 					// ... et de sortie.
 					OutputStream os =so.getOutputStream();
+
+					
+					//
+					//os.write();
+					
 					PrintStream ps = new PrintStream(os, false, "utf-8");
 					
-					ps.println(str);
+					
 					ps.flush();
 					
 				}
