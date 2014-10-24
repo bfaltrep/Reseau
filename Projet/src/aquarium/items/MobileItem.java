@@ -42,6 +42,10 @@ public abstract class MobileItem extends AquariumItem {
 	 */
 	public abstract AquariumItem getNewTarget(List<AquariumItem> neighbours);
 	
+	/**
+	 * 
+	 * @return the current target
+	 */
 	public abstract AquariumItem getCurrentTarget();
 
 	/**

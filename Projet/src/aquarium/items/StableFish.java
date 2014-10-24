@@ -26,7 +26,7 @@ public class StableFish extends MobileItem {
 
 	@Override
 	public AquariumItem getNewTarget(List<AquariumItem> neighbours) {
-		int destination = RandomNumber.randomValue(0, neighbours.size());
+		int destination = RandomNumber.randomValue(0, neighbours.size()-1);
 		target= neighbours.get(destination);
 		return target;
 	}
@@ -34,6 +34,10 @@ public class StableFish extends MobileItem {
 	@Override
 	public int getMaximalWidth() {
 		return MAX_WIDTH;
+	}
+	
+	public String getImage(){
+		return img;
 	}
 
 	protected void setTarget(AquariumItem a){

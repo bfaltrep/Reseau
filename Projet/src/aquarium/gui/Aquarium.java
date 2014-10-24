@@ -114,6 +114,17 @@ public class Aquarium extends JPanel {
 	}
 
 	/**
+	 * 
+	 * @param i, an integer between [0, number of items of the aquarium]
+	 * @return the AquariumItem at i position.
+	 */
+	public AquariumItem getAquariumItem(int i){
+		return items.get(i);
+	}
+	
+	
+	
+	/**
 	 * Proceeds to the movement of any movable AquariumItem and updates the
 	 * screen
 	 */

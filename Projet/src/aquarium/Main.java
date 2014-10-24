@@ -16,8 +16,28 @@ import aquarium.gui.Aquarium;
 public class Main  {
 	
 	public static void main(String[] args) throws IOException {
-		System.out.println("tagazok");
-		Aquarium aquarium = new Aquarium();
+		if(args[0] == "serveur"){
+			System.out.println("Je suis le serveur");
+			//serveur
+			Aquarium aquarium = new Aquarium();
+			AquariumWindow animation = new AquariumWindow(aquarium);
+			animation.displayOnscreen();
+			
+			
+			//quand nouveau client, alloue une couleur et la transmet aux autres
+		}else{
+			System.out.println("Je suis un client");
+			//client
+			//1 génère l'aquarium et son contenu local
+			Aquarium aquarium = new Aquarium();
+			
+
+			
+			//2 génère ses poissons
+			//3 envoi ses poissons
+			
+		}
+
 		AquariumWindow animation = new AquariumWindow(aquarium);
 		animation.displayOnscreen();
 		
