@@ -24,22 +24,22 @@ public class Main  {
 			animation.displayOnscreen();
 			
 			
+			
 			//quand nouveau client, alloue une couleur et la transmet aux autres
 		}else{
 			System.out.println("Je suis un client");
 			//client
 			//1 génère l'aquarium et son contenu local
 			Aquarium aquarium = new Aquarium();
+			AquariumWindow animation = new AquariumWindow(aquarium);
 			
+			//après avoir récupéré les poissons des autres
+			animation.displayOnscreen();
+
 
 			
-			//2 génère ses poissons
-			//3 envoi ses poissons
-			
 		}
-/*
-		AquariumWindow animation = new AquariumWindow(aquarium);
-		animation.displayOnscreen();
+
 		
 		//gestion multi
 		
@@ -62,6 +62,6 @@ public class Main  {
 			mt.start();
 		}
 		serveur.close();
-*/
+
 	}
 }
