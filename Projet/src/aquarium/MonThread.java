@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -21,7 +23,7 @@ public class MonThread extends Thread {
 	Aquarium aqua;
 	
 	
-	public MonThread(Socket s,Set t, Aquarium a){
+	public MonThread(Socket s,Set t, Aquarium a) throws IOException{
 		so = s;
 		set = t;
 		aqua = a;
@@ -29,52 +31,32 @@ public class MonThread extends Thread {
 	
 	public void run(){
 		try {
-			Iterator it = set.iterator();
+			byte inputTab[] = new byte [1024];
+			byte outputTab[] = new byte [1024];
 			
-			//Récupère les flux d'entrée ...
+			String welcomeMessage = "Bonjour Client !";
+			//réception poissons du nouveau client
+			//envoyer les poissons supplémentaire
 			
-			InputStream is = so.getInputStream();
-					
-			BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
-/*
-			while(true){
-				String str = br.readLine();
-				
-				while(it.hasNext()){
-					
-					so = (Socket)it.next();
-					
-					
-					
-					// ... et de sortie.
-					OutputStream os =so.getOutputStream();
 
-					
-					//
-					//os.write();
-					
-					PrintStream ps = new PrintStream(os, false, "utf-8");
-					
-					//récupérer l'image du premier poisson de la liste.
-					int i = 0;
-					AquariumItem ai = aqua.getAquariumItem(i);
-					while(!(ai instanceof StableFish)){
-						ai = aqua.getAquariumItem(i);
-						i++;
-					}
-					FileInputStream fis = new FileInputStream(((StableFish) ai).getImage());
-					
-					
-					
-					
-					ps.flush();
-					
+			OutputStream os = so.getOutputStream();
+			os.write(welcomeMessage.getBytes(Charset.forName("UTF-8")));
+
+
+			while(true){
+				InputStream is = so.getInputStream();
+
+				BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+				while(true){
+					String str = br.readLine();
+					System.out.println(str);
 				}
-			}*/
-			so.close();
+			}
+			//so.close();
 			
 		} catch (IOException e){
 				e.printStackTrace();
-			}
+		}
 	}
+		
 }
