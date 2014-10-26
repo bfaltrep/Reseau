@@ -1,19 +1,10 @@
 package aquarium;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.charset.Charset;
-import java.util.HashSet;
-import java.util.Set;
 
-import aquarium.gui.AquariumWindow;
-import aquarium.gui.Aquarium;
+//import aquarium.gui.AquariumWindow;
+//import aquarium.gui.Aquarium;
 
 /**
  * Starting point of the Aquarium application
@@ -21,12 +12,22 @@ import aquarium.gui.Aquarium;
 public class Main  {
 	/**
 	 * 
-	 * @param args si args[0] = "serveur" et port => est le serveur, ouvert au port port
-	 * 							"client" et une chaine de caractère représentant l'ip d'une personne et le port 
-	 * 							=> indique à quel serveur on souhaite se connecter, a quel port
+	 * @param args : ip et port => si ip est localhost : est le serveur, ouvert au port port. Ouvre un client sur soi-même
+	 * 							=> si ip est autre : est un client et indique à quelle ip se connecter, via quel port
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
+		ServerSocket serveur;
+
+		try{
+		serveur = new ServerSocket(8888);
+		Thread t = new Thread(new MonThread(serveur));
+		t.start();
+		}catch(IOException e){
+		e.printStackTrace();
+		}
+		
+		/*
 		System.out.println(args[0]);
 		if("serveur".matches(args[0])){
 			System.out.println("Je suis le serveur");
@@ -99,6 +100,6 @@ public class Main  {
 
 				os.write(welcomeMessage.getBytes(Charset.forName("UTF-8")));
 			}
-		}
+		}*/
 	}
 }

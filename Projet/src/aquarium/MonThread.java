@@ -1,25 +1,65 @@
 package aquarium;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.Set;
 
-import aquarium.gui.Aquarium;
-import aquarium.items.AquariumItem;
-import aquarium.items.StableFish;
+//import aquarium.gui.Aquarium;
+//import aquarium.items.AquariumItem;
+//import aquarium.items.StableFish;
 
 public class MonThread extends Thread {
-	Socket so;
-	Set set;
+	
+	private ServerSocket socketserver;
+	  private Socket socket;
+	  private Set<Socket> clients;
+	  //entrées sorties 
+	  private PrintWriter out;
+	  private BufferedReader in;
+	  
+	  //pour les tests
+	  private int nbClients;
+	  
+	public MonThread(ServerSocket s){
+		socketserver = s;
+		clients = new HashSet<Socket>();
+	}
+	public void run() {
+
+	       try {
+	       	while(true){
+	       	socket = socketserver.accept(); // Un client se connecte on l'accepte
+	       	clients.add(socket);
+	               System.out.println("Le client n° "+nbClients+" est connecté. ");
+	               nbClients++;
+	               
+	               //envoi d'un message
+	               out = new PrintWriter(socket.getOutputStream());
+	out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+". au numéro "+nbClients);
+	out.flush();
+	//réception
+	in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	               String tampon = in.readLine();
+	               System.out.println(tampon);
+	               
+	               socket.close();
+	               
+	       	}
+	       	
+	       } catch (IOException e) {
+	    	   e.printStackTrace();
+	       }
+	}
+	
+	
+	
+	/*Socket so;
+	Set<Socket> set;
 	Aquarium aqua;
 	
 	
@@ -31,6 +71,7 @@ public class MonThread extends Thread {
 	
 	public void run(){
 		try {
+			System.out.println("thread créé");
 			byte inputTab[] = new byte [1024];
 			byte outputTab[] = new byte [1024];
 			
@@ -41,7 +82,6 @@ public class MonThread extends Thread {
 
 			OutputStream os = so.getOutputStream();
 			os.write(welcomeMessage.getBytes(Charset.forName("UTF-8")));
-
 
 			while(true){
 				InputStream is = so.getInputStream();
@@ -57,6 +97,6 @@ public class MonThread extends Thread {
 		} catch (IOException e){
 				e.printStackTrace();
 		}
-	}
+	}*/
 		
 }
