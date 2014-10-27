@@ -21,8 +21,10 @@ public class Main  {
 
 		try{
 		serveur = new ServerSocket(8888);
+		
 		Thread t = new Thread(new MonThread(serveur));
 		t.start();
+		
 		}catch(IOException e){
 		e.printStackTrace();
 		}

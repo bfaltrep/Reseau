@@ -29,29 +29,31 @@ public class MonThread extends Thread {
 		socketserver = s;
 		clients = new HashSet<Socket>();
 	}
+	
 	public void run() {
 
-	       try {
-	       	while(true){
-	       	socket = socketserver.accept(); // Un client se connecte on l'accepte
-	       	clients.add(socket);
-	               System.out.println("Le client n° "+nbClients+" est connecté. ");
-	               nbClients++;
+		try {
+			while(true){
+	       		socket = socketserver.accept(); // Un client se connecte on l'accepte
+	       		clients.add(socket);
+	       		System.out.println("Le client n° "+nbClients+" est connecté. ");
+	            nbClients++;
 	               
-	               //envoi d'un message
-	               out = new PrintWriter(socket.getOutputStream());
-	out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+". au numéro "+nbClients);
-	out.flush();
-	//réception
-	in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	               String tampon = in.readLine();
-	               System.out.println(tampon);
+	            //envoi d'un message
+	            out = new PrintWriter(socket.getOutputStream());
+	            out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+". au numéro "+nbClients);
+	            out.flush();
+	            
+				//réception
+				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	            String tampon = in.readLine();
+	            System.out.println(tampon);
 	               
-	               socket.close();
+	            socket.close();
 	               
 	       	}
 	       	
-	       } catch (IOException e) {
+	      } catch (IOException e) {
 	    	   e.printStackTrace();
 	       }
 	}
