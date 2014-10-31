@@ -9,24 +9,30 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
+import aquarium.gui.Aquarium;
+
 //import aquarium.gui.Aquarium;
 //import aquarium.items.AquariumItem;
 //import aquarium.items.StableFish;
 
 public class MonThread extends Thread {
+	private static Aquarium aqua;
 	
+	//gestion des clients
 	private ServerSocket socketserver;
-	  private Socket socket;
-	  private Set<Socket> clients;
-	  //entrées sorties 
-	  private PrintWriter out;
-	  private BufferedReader in;
+	private Socket socket;
+	private static Set<Socket> clients;
+	
+	//entrées sorties 
+	private PrintWriter out;
+	private BufferedReader in;
+	 
+	//pour les tests
+	private int nbClients;
 	  
-	  //pour les tests
-	  private int nbClients;
-	  
-	public MonThread(ServerSocket s){
+	public MonThread(ServerSocket s, Aquarium aqua){
 		socketserver = s;
+		this.aqua = aqua;
 		clients = new HashSet<Socket>();
 	}
 	
@@ -39,16 +45,32 @@ public class MonThread extends Thread {
 	       		System.out.println("Le client n° "+nbClients+" est connecté. ");
 	            nbClients++;
 	               
+	            
+	            //premier contact
+	            
 	            //envoi d'un message
 	            out = new PrintWriter(socket.getOutputStream());
-	            out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+". au numéro "+nbClients);
+	            out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+" au numéro "+nbClients);
 	            out.flush();
 	            
+	            //réception des poissons du client
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            
+	            /*
 				//réception
 				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	            String tampon = in.readLine();
 	            System.out.println(tampon);
-	               
+	            */
+
 	            socket.close();
 	               
 	       	}

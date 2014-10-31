@@ -8,26 +8,45 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import aquarium.gui.Aquarium;
+
 public class Client {
 
 	public static void main(String[] args) {
 		Socket socket;
 		BufferedReader in;
 		PrintWriter out;
+		Aquarium a ;
+		
+		
 		try{
 			socket = new Socket (InetAddress.getLocalHost(),8888);
 			System.out.println("demande de connexion ");
 			
+			//MESSAGE DE BIENVENUE DANS L AQUARIUM
 			// réception > InputStream > ISReader > BufferedReader
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String message = in.readLine();
 			System.out.println(message);
 			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			/*
 			//envoi d'un message
 			out = new PrintWriter(socket.getOutputStream());
 			out.println(" bonjour, merci de me transmettre l'aquarium");
 			out.flush();
-			
+			*/
 			socket.close();
 		}catch(UnknownHostException e){
 			e.printStackTrace();

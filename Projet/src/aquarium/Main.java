@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 //import aquarium.gui.AquariumWindow;
-//import aquarium.gui.Aquarium;
+import aquarium.gui.Aquarium;
 
 /**
  * Starting point of the Aquarium application
@@ -18,11 +18,13 @@ public class Main  {
 	 */
 	public static void main(String[] args) throws IOException {
 		ServerSocket serveur;
-
+		
+		Aquarium aqua = new Aquarium();
+		
 		try{
 		serveur = new ServerSocket(8888);
 		
-		Thread t = new Thread(new MonThread(serveur));
+		Thread t = new MonThread(serveur, aqua);
 		t.start();
 		
 		}catch(IOException e){
