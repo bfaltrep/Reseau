@@ -19,8 +19,8 @@ public abstract class MobileItem extends AquariumItem {
 	 * @param width
 	 * @param imagePath
 	 */
-	public MobileItem(int width, String imagePath, String address) {
-		super(width, imagePath, address);
+	public MobileItem(int width, String imagePath) {
+		super(width, imagePath);
 	}
 
 	/**
@@ -31,8 +31,8 @@ public abstract class MobileItem extends AquariumItem {
 	 * @param maxWidth
 	 * @param imagePath
 	 */
-	public MobileItem(int minWidth, int maxWidth, String imagePath, String address) {
-		super(minWidth, maxWidth, imagePath, address);
+	public MobileItem(int minWidth, int maxWidth, String imagePath) {
+		super(minWidth, maxWidth, imagePath);
 	}
 
 	/**

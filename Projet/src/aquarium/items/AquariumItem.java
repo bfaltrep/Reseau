@@ -22,10 +22,6 @@ import aquarium.util.RandomNumber;
 public abstract class AquariumItem {
 	
 	/**
-	 * IP address of origin of AquariumItem
-	 */
-	private InetAddress origin;
-	/**
 	 * Image representation of the AquariumItem
 	 */
 	private final Image image;
@@ -52,8 +48,8 @@ public abstract class AquariumItem {
 	 * @param maxWidth
 	 * @param imagePath
 	 */
-	public AquariumItem(int minWidth, int maxWidth, String imagePath, String address) {
-		this(RandomNumber.randomValue(minWidth, maxWidth), imagePath, address);
+	public AquariumItem(int minWidth, int maxWidth, String imagePath) {
+		this(RandomNumber.randomValue(minWidth, maxWidth), imagePath);
 	}
 
 	/**
@@ -62,7 +58,7 @@ public abstract class AquariumItem {
 	 * @param width
 	 * @param imagePath
 	 */
-	public AquariumItem(int width, String imagePath, String address) {
+	public AquariumItem(int width, String imagePath) {
 		this.image = Toolkit.getDefaultToolkit().createImage(
 				ClassLoader.getSystemResource(imagePath));
 		ImageIcon icon = new ImageIcon(image);
@@ -71,11 +67,6 @@ public abstract class AquariumItem {
 		double ratio = width / (this.width * 1.0);
 		this.width = (int) (this.width * ratio);
 		this.height = (int) (this.height * ratio);
-		try {
-			origin = InetAddress.getByName(address);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**

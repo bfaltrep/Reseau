@@ -22,8 +22,6 @@ import aquarium.items.Seaweed;
  * order to display graphical elements.
  */
 public class Aquarium extends JPanel {
-
-	private static InetAddress poste;
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -82,59 +80,24 @@ public class Aquarium extends JPanel {
 
 	
 	
-	public Aquarium(InetAddress address) {
-		
-		try {
-			poste = InetAddress.getByName(address);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+	public Aquarium() {
 		for (int i = 0; i < NB_STONES; i++) {
-			AquariumItem ai = new Seastone(address);
+			AquariumItem ai = new Seastone();
 			if (ai.sink(items))
 				items.add(ai);
 		}
 		for (int i = 0; i < NB_SEAWEED; i++) {
-			AquariumItem ai = new Seaweed(address);
+			AquariumItem ai = new Seaweed();
 			if (ai.sink(items))
 				items.add(ai);
 		}
 		for (int i = 0; i < NB_FISH; i++) {
-			AquariumItem ai = new StableFish(address);
+			AquariumItem ai = new StableFish();
 			if (ai.sink(items))
 				items.add(ai);
 		}
 		for (int i = 0; i < NB_DORISFISH; i++) {
-			AquariumItem ai = new DorisFish(address);
-			if (ai.sink(items))
-				items.add(ai);
-		}
-	}
-	
-	
-	public Aquarium(String address) {
-		try {
-			poste = InetAddress.getByName(address);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		for (int i = 0; i < NB_STONES; i++) {
-			AquariumItem ai = new Seastone(address);
-			if (ai.sink(items))
-				items.add(ai);
-		}
-		for (int i = 0; i < NB_SEAWEED; i++) {
-			AquariumItem ai = new Seaweed(address);
-			if (ai.sink(items))
-				items.add(ai);
-		}
-		for (int i = 0; i < NB_FISH; i++) {
-			AquariumItem ai = new StableFish(address);
-			if (ai.sink(items))
-				items.add(ai);
-		}
-		for (int i = 0; i < NB_DORISFISH; i++) {
-			AquariumItem ai = new DorisFish(address);
+			AquariumItem ai = new DorisFish();
 			if (ai.sink(items))
 				items.add(ai);
 		}

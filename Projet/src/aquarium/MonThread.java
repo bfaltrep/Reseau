@@ -6,17 +6,22 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import aquarium.gui.Aquarium;
+import aquarium.items.AquariumItem;
 
 //import aquarium.gui.Aquarium;
 //import aquarium.items.AquariumItem;
 //import aquarium.items.StableFish;
 
 public class MonThread extends Thread {
+	//pour l'aquarium
 	private static Aquarium aqua;
+	private static List<List<AquariumItem>> poissons = new ArrayList<List<AquariumItem>>();
 	
 	//gestion des clients
 	private ServerSocket socketserver;
@@ -59,11 +64,7 @@ public class MonThread extends Thread {
 	            System.out.println(tampon);
 	            
 	            
-	            
-	            
-	            
-	            
-	            
+	
 	            
 	            /*
 				//réception

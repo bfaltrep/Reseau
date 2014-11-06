@@ -1,10 +1,23 @@
 package aquarium;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+
+
+
+
+import java.net.Socket;
+import java.nio.charset.Charset;
+import java.util.HashSet;
+
+import java.util.Set;
 
 //import aquarium.gui.AquariumWindow;
 import aquarium.gui.Aquarium;
+import aquarium.gui.AquariumWindow;
 
 /**
  * Starting point of the Aquarium application
@@ -17,21 +30,22 @@ public class Main  {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
+		/*
 		ServerSocket serveur;
 		
-		Aquarium aqua = new Aquarium(serveur.getInetAddress());
 				
 		try{
+			
 		serveur = new ServerSocket(8888);
-		
+		Aquarium aqua = new Aquarium(serveur.getInetAddress());
 		Thread t = new MonThread(serveur, aqua);
 		t.start();
 		
 		}catch(IOException e){
 		e.printStackTrace();
 		}
+		*/
 		
-		/*
 		System.out.println(args[0]);
 		if("serveur".matches(args[0])){
 			System.out.println("Je suis le serveur");
@@ -51,16 +65,9 @@ public class Main  {
 			
 			
 			MonThread mt ;
-			//ensemble des clients
-			Set set = new HashSet<Socket>();
-			
 			while(true){
-				Socket s = 	serveur.accept();
-				synchronized(set){
-					set.add(s);
-				}
 				
-				mt = new MonThread(s,set, aquarium);
+				mt = new MonThread( aquarium);
 				if(mt == null)
 					break;
 				mt.start();
@@ -104,6 +111,6 @@ public class Main  {
 
 				os.write(welcomeMessage.getBytes(Charset.forName("UTF-8")));
 			}
-		}*/
+		}
 	}
 }
