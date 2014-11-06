@@ -54,8 +54,9 @@ public class MonThread extends Thread {
 	            out.flush();
 	            
 	            //réception des poissons du client
-	            
-	            
+	            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	            String tampon = in.readLine();
+	            System.out.println(tampon);
 	            
 	            
 	            

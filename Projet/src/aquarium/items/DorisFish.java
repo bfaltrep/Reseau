@@ -8,13 +8,13 @@ public class DorisFish extends StableFish {
 
 	private static final String img = "image/dory.png";
 	
-	public DorisFish() {
+	public DorisFish(String address) {
 		super(img);
 		setBehavior();
 	}
 	
-	public DorisFish(int width) {
-		super(width);
+	public DorisFish(int width, String address) {
+		super(width, address);
 		setBehavior();
 	}
 
@@ -27,7 +27,7 @@ public class DorisFish extends StableFish {
 				setTarget(null);
 				
 			}
-		}, 0, 1, TimeUnit.SECONDS);
+		}, 0, 100, TimeUnit.MILLISECONDS);
 	}
 	
 }

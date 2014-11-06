@@ -19,8 +19,8 @@ public class Main  {
 	public static void main(String[] args) throws IOException {
 		ServerSocket serveur;
 		
-		Aquarium aqua = new Aquarium();
-		
+		Aquarium aqua = new Aquarium(serveur.getInetAddress());
+				
 		try{
 		serveur = new ServerSocket(8888);
 		

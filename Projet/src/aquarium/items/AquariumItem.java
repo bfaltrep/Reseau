@@ -5,6 +5,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -18,12 +20,16 @@ import aquarium.util.RandomNumber;
  * to be extended in order to be instantiated.
  */
 public abstract class AquariumItem {
-
+	
+	/**
+	 * IP address of origin of AquariumItem
+	 */
+	private InetAddress origin;
 	/**
 	 * Image representation of the AquariumItem
 	 */
 	private final Image image;
-
+	
 	/**
 	 * Current position of the Aquarium Item in the Aquarium
 	 */
@@ -46,8 +52,8 @@ public abstract class AquariumItem {
 	 * @param maxWidth
 	 * @param imagePath
 	 */
-	public AquariumItem(int minWidth, int maxWidth, String imagePath) {
-		this(RandomNumber.randomValue(minWidth, maxWidth), imagePath);
+	public AquariumItem(int minWidth, int maxWidth, String imagePath, String address) {
+		this(RandomNumber.randomValue(minWidth, maxWidth), imagePath, address);
 	}
 
 	/**
@@ -56,7 +62,7 @@ public abstract class AquariumItem {
 	 * @param width
 	 * @param imagePath
 	 */
-	public AquariumItem(int width, String imagePath) {
+	public AquariumItem(int width, String imagePath, String address) {
 		this.image = Toolkit.getDefaultToolkit().createImage(
 				ClassLoader.getSystemResource(imagePath));
 		ImageIcon icon = new ImageIcon(image);
@@ -65,6 +71,11 @@ public abstract class AquariumItem {
 		double ratio = width / (this.width * 1.0);
 		this.width = (int) (this.width * ratio);
 		this.height = (int) (this.height * ratio);
+		try {
+			origin = InetAddress.getByName(address);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -135,8 +146,7 @@ public abstract class AquariumItem {
 	public boolean sink(List<AquariumItem> items) {
 		int nbTries = 0;
 		while (this.intersects(items)) {
-			this.setPosition(RandomNumber.randomPoint(0, Aquarium.getSizeX()
-					- this.width, 0, Aquarium.getSizeY() - this.height));
+			this.setPosition(RandomNumber.randomPoint(0, Aquarium.getSizeX() - this.width, 0, Aquarium.getSizeY() - this.height));
 			nbTries++;
 			if (nbTries > 20)
 				return false;

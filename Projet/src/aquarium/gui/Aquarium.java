@@ -3,6 +3,8 @@ package aquarium.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,9 @@ import aquarium.items.Seaweed;
  */
 public class Aquarium extends JPanel {
 
+	private static InetAddress poste;
+	
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -75,25 +80,61 @@ public class Aquarium extends JPanel {
 	 */
 	private List<AquariumItem> items = new ArrayList<AquariumItem>();
 
-	public Aquarium() {
-
+	
+	
+	public Aquarium(InetAddress address) {
+		
+		try {
+			poste = InetAddress.getByName(address);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		for (int i = 0; i < NB_STONES; i++) {
-			AquariumItem ai = new Seastone();
+			AquariumItem ai = new Seastone(address);
 			if (ai.sink(items))
 				items.add(ai);
 		}
 		for (int i = 0; i < NB_SEAWEED; i++) {
-			AquariumItem ai = new Seaweed();
+			AquariumItem ai = new Seaweed(address);
 			if (ai.sink(items))
 				items.add(ai);
 		}
 		for (int i = 0; i < NB_FISH; i++) {
-			AquariumItem ai = new StableFish();
+			AquariumItem ai = new StableFish(address);
 			if (ai.sink(items))
 				items.add(ai);
 		}
 		for (int i = 0; i < NB_DORISFISH; i++) {
-			AquariumItem ai = new DorisFish();
+			AquariumItem ai = new DorisFish(address);
+			if (ai.sink(items))
+				items.add(ai);
+		}
+	}
+	
+	
+	public Aquarium(String address) {
+		try {
+			poste = InetAddress.getByName(address);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < NB_STONES; i++) {
+			AquariumItem ai = new Seastone(address);
+			if (ai.sink(items))
+				items.add(ai);
+		}
+		for (int i = 0; i < NB_SEAWEED; i++) {
+			AquariumItem ai = new Seaweed(address);
+			if (ai.sink(items))
+				items.add(ai);
+		}
+		for (int i = 0; i < NB_FISH; i++) {
+			AquariumItem ai = new StableFish(address);
+			if (ai.sink(items))
+				items.add(ai);
+		}
+		for (int i = 0; i < NB_DORISFISH; i++) {
+			AquariumItem ai = new DorisFish(address);
 			if (ai.sink(items))
 				items.add(ai);
 		}
