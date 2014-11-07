@@ -12,7 +12,27 @@ public class Protocole1 {
 
 	//je vois pas comment transferer l'image
 
-	public static byte[] encodeFishByte(int width, int height, String name, int x, int y) {
+	public static byte[] encodeFishByte(int type, intint width, int height, String name, int x, int y) {
+			if (type == 0)
+			{
+
+			}
+			else if (type == 1)
+			{
+
+			}
+			else if (type == 2)
+			{
+
+			}
+			else if (type == 3)
+			{
+				
+			}
+			else if (type == 4)
+			{
+				
+			}
 		String result = width + "!" + height + "!" + x + "!" + y + "!" + name;
 		return result.getBytes();
 	}
@@ -42,6 +62,10 @@ public class Protocole1 {
 		}
 	}
 
+	public static int decode(String input) {
+		return 0;
+	}
+	
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		int width = 4;
 		int height = 5;
@@ -49,8 +73,9 @@ public class Protocole1 {
 		int yPos = 7;
 		String fishName = "DorisFish";
 		
-		byte tmp[] = encodeFishByte(width, height, fishName, xPos, yPos);
+		//byte tmp[] = encodeFishByte(width, height, fishName, xPos, yPos);
 
+		
 		decodeFishByte(tmp);
 	}
 }
