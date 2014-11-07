@@ -27,7 +27,7 @@ public class DorisFish extends StableFish {
 				setTarget(null);
 				
 			}
-		}, 0, 100, TimeUnit.MILLISECONDS);
+		}, 0, 3, TimeUnit.SECONDS);
 	}
 	
 }

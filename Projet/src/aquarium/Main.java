@@ -3,6 +3,7 @@ package aquarium;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 
@@ -12,8 +13,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.HashSet;
-
 import java.util.Set;
+
 
 //import aquarium.gui.AquariumWindow;
 import aquarium.gui.Aquarium;
@@ -30,22 +31,31 @@ public class Main  {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		/*
-		ServerSocket serveur;
-		
-				
-		try{
+		System.out.println("hello");
+		System.out.println(args[0].matches(InetAddress.getLocalHost().toString()));
+		if(args[0].matches("localhost")){ // || args[0].matches(InetAddress.getLocalHost().toString())){
+			System.out.println("serveur "+InetAddress.getLocalHost()+" "+args[1]);
+			ServerSocket serveur;
 			
-		serveur = new ServerSocket(8888);
-		Aquarium aqua = new Aquarium(serveur.getInetAddress());
-		Thread t = new MonThread(serveur, aqua);
-		t.start();
-		
-		}catch(IOException e){
-		e.printStackTrace();
+					
+			try{
+				
+			serveur = new ServerSocket(Integer.parseInt(args[1]));
+			Aquarium aqua = new Aquarium();
+			Thread t = new MonThread(serveur, aqua);
+			t.start();
+			
+			}catch(IOException e){
+			e.printStackTrace();
+			}
+		}else{
+			System.out.println("client "+args[0]+" "+args[1]);
+			Client c = new Client();
+			c.start();
+			
 		}
-		*/
 		
+		/*
 		System.out.println(args[0]);
 		if("serveur".matches(args[0])){
 			System.out.println("Je suis le serveur");
@@ -111,6 +121,6 @@ public class Main  {
 
 				os.write(welcomeMessage.getBytes(Charset.forName("UTF-8")));
 			}
-		}
+		}*/
 	}
 }
