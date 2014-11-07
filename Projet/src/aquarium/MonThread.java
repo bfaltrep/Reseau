@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import aquarium.gui.Aquarium;
+import aquarium.gui.AquariumWindow;
 import aquarium.items.AquariumItem;
 import aquarium.Protocole1;
 
@@ -20,6 +21,7 @@ public class MonThread extends Thread {
 	//pour l'aquarium
 	private static Aquarium aqua;
 	private static List<ElementClient> poissons;
+	private Object o = new Object();
 	
 	//gestion des clients
 	private ServerSocket socketserver;
@@ -44,7 +46,8 @@ public class MonThread extends Thread {
 		try {
 			poissons = new ArrayList<ElementClient>();
 			poissons.add(new ElementClient("localhost"));
-			
+			AquariumWindow animation = new AquariumWindow(aqua);
+			animation.displayOnscreen();
 			
 			while(true){
 	       		socket = socketserver.accept(); // Un client se connecte on l'accepte
@@ -61,30 +64,33 @@ public class MonThread extends Thread {
 	            out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+" au numéro "+nbClients);
 	            out.flush();
 	            
-	            //réception des classes du client
-	            
-	            //réception des poissons du client
-	            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	            String tampon = in.readLine();
-	            
-	            //int categorieMessage = decoder(tampon);
-	            //System.out.println(tampon+decoder(tampon)); // TEMPORAIRE
-	            boolean reussite = traiterReception(tampon);
-	            //TMP traitement d'erreur à revoir
-	            if(!reussite){
-	            	System.out.println("problème de réception");
-	            }
-	            
+	            String tampon;
 	            
 	            //traitement dans le temps après le premier contact
 	            do{
+	            	//réception des classes du client
+	            	
+	            	//réception des poissons du client
+		            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		            tampon = in.readLine();
+		            
+		            int categorieMessage = Protocole1.decode(tampon);
+		            //System.out.println(tampon+Protocole1.decode(tampon)); // TEMPORAIRE
+		            boolean reussite = traiterReception(tampon);
+		            //TMP traitement d'erreur à revoir
+		            if(!reussite){
+		            	System.out.println("problème de réception");
+		            }
+		            
+		            
 	            	in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		            tampon = in.readLine();
-	            	traiterReception(tampon);
+		            synchronized(o){
+		            	traiterReception(tampon);
+		            }
 	            	
 	            	
-	            	
-	            }while(decoder(tampon) != 0)
+	            }while(Protocole1.decode(tampon) != 0);
 	            
 	            socket.close();
 	               
@@ -102,7 +108,9 @@ public class MonThread extends Thread {
 		return true;
 	}
 	
-	
+	boolean traiterEnvoi(){
+		return true;
+	}
 	
 	
 	

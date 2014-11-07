@@ -24,6 +24,7 @@ import aquarium.gui.AquariumWindow;
  * Starting point of the Aquarium application
  */
 public class Main  {
+	
 	/**
 	 * 
 	 * @param args : ip et port => si ip est localhost : est le serveur, ouvert au port port. Ouvre un client sur soi-même

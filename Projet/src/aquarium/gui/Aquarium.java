@@ -78,7 +78,7 @@ public class Aquarium extends JPanel {
 	 */
 	private List<AquariumItem> items = new ArrayList<AquariumItem>();
 
-	
+	private List<AquariumItem> others = new ArrayList<AquariumItem>();
 	
 	public Aquarium() {
 		for (int i = 0; i < NB_STONES; i++) {
@@ -125,8 +125,6 @@ public class Aquarium extends JPanel {
 	public AquariumItem getAquariumItem(int i){
 		return items.get(i);
 	}
-	
-	
 	
 	/**
 	 * Proceeds to the movement of any movable AquariumItem and updates the

@@ -7,15 +7,18 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import aquarium.gui.Aquarium;
 import aquarium.gui.AquariumWindow;
+import aquarium.items.AquariumItem;
 
 public class Client extends Thread {
 	private Socket socket;
 	private BufferedReader in;
 	private PrintWriter out;
 	private Aquarium a ;
+	private List<AquariumItem> others;
 	
 	public Client(){
 		//vide car initialisation dans le run
