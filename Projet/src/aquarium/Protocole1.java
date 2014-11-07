@@ -12,29 +12,38 @@ public class Protocole1 {
 
 	//je vois pas comment transferer l'image
 
-	public static byte[] encodeFishByte(int type, intint width, int height, String name, int x, int y) {
+	public static byte[] encodeFishByte(int type, int fishId, String name, int width, int height, int x, int y) {
 			if (type == 0)
 			{
-
+				String result = type + "!";
+				return result.getBytes();
 			}
 			else if (type == 1)
 			{
-
+				String result = type + "!" + name;
+				return result.getBytes();
 			}
 			else if (type == 2)
 			{
-
+				String result = type + "!" + fishId + "!" + width + "!" + height + "!" + x + "!" + y;
+				return result.getBytes();
 			}
 			else if (type == 3)
 			{
-				
+				String result = type + "!" + fishId;
+				return result.getBytes();
 			}
 			else if (type == 4)
 			{
-				
+				String result = type + "!" + fishId + "!" + x + "!" + y;
+				return result.getBytes();
 			}
-		String result = width + "!" + height + "!" + x + "!" + y + "!" + name;
-		return result.getBytes();
+			else if (type == 5)
+			{
+				String result = type + "!";
+				return result.getBytes();
+			}
+			return "";
 	}
 	
 	public static String encodeFishString(int width, int height, String name, int x, int y) {
@@ -74,8 +83,6 @@ public class Protocole1 {
 		String fishName = "DorisFish";
 		
 		//byte tmp[] = encodeFishByte(width, height, fishName, xPos, yPos);
-
-		
 		decodeFishByte(tmp);
 	}
 }
