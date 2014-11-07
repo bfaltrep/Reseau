@@ -67,7 +67,7 @@ public class Main  {
 			MonThread mt ;
 			while(true){
 				
-				mt = new MonThread( aquarium);
+				mt = new MonThread(serveur,aquarium);
 				if(mt == null)
 					break;
 				mt.start();
