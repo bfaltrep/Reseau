@@ -54,8 +54,8 @@ public class Protocole1 {
 	}
 	
 	// !! \\
-	public static String encodeFishString(int id, int width, String name, int x, int y) {
-		return id + "!" + width + "!" + "!" + x + "!" + y + "!" + name;
+	public static String encodeFishString(int id,int width, int height, int x, int y,String name) {
+		return id + "!" + width + "!" + height + "!" + x + "!" + y + "!" + name;
 	}
 
 	public static void decodeFishByte(byte input[]) throws UnsupportedEncodingException {

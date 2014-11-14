@@ -3,6 +3,7 @@ package aquarium.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,10 +11,10 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import aquarium.ElementImage;
-import aquarium.Mobiles;
 import aquarium.Protocole1;
 import aquarium.items.AquariumItem;
 import aquarium.items.DorisFish;
+import aquarium.items.Mobiles;
 import aquarium.items.StableFish;
 import aquarium.items.MobileItem;
 import aquarium.items.Seastone;
@@ -195,7 +196,7 @@ public class Aquarium extends JPanel {
 			if(tmp instanceof MobileItem){
 				i++;
 				String name = ((MobileItem) tmp).getClasse();
-				res.add(Protocole1.encodeFishString(i,tmp.getWidth(),name, tmp.getPosition().x, tmp.getPosition().y));
+				res.add(Protocole1.encodeFishString(i,tmp.getWidth(),tmp.getHeight() ,tmp.getPosition().x, tmp.getPosition().y,name));
 			}
 		}
 		return res;
@@ -214,6 +215,18 @@ public class Aquarium extends JPanel {
 	public ElementImage getClasse(int i){
 		return classes.get(i);
 	}
+	
+	public int getClasseIndex(String s){
+		int index = 0;
+		Iterator<ElementImage> it = classes.iterator(); 
+		while (it.hasNext()) {
+			ElementImage tmp = it.next();
+			if(tmp.getNom() == s){
+				return index;
+			}
+		}
+		return -1;
+	}	
 	
 	/**
 	 * retourne le nombre de classes existantes pour ce client
@@ -239,10 +252,6 @@ public class Aquarium extends JPanel {
 				it.remove();
 			}
 		}	
-	}
-	
-	public void addOther(int idC, int idP, MobileItem pois, String clas){
-		others.add(new Mobiles(idC, idP, pois, clas));
 	}
 	
 	public void addOther(Mobiles m){
@@ -272,7 +281,7 @@ public class Aquarium extends JPanel {
 	public void OtherModifPositionSimple(int client, int idPoisson, int x, int y){
 		int index = parcourirOther (client,idPoisson);
 		if(index != -1){
-			others.get(index).modifierPosition(x, y);
+			others.get(index).setPosition(new Point(x,y));;
 		}
 	}
 	

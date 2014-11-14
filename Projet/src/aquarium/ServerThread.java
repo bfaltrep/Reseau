@@ -1,38 +1,33 @@
 package aquarium;
 
-import java.awt.Image;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import aquarium.gui.Aquarium;
 import aquarium.gui.AquariumWindow;
-import aquarium.items.AquariumItem;
+import aquarium.items.Mobiles;
 import aquarium.Protocole1;
 
 public class ServerThread extends Thread {	
-	private Object o = new Object();
+	//private Object o = new Object();
 	private Aquarium aqua;
 	
 	//gestion des clients
 	private ServerSocket socketserver;
 	private Socket socket;
 	private static Set<Socket> clients;
+	private int nbClients;
 	
 	//entrées sorties 
 	private PrintWriter out;
 	private BufferedReader in;
-	 
-	//pour les tests
-	private int nbClients;
 	  
 	public ServerThread(ServerSocket s){
 		aqua = new Aquarium();
@@ -53,22 +48,51 @@ public class ServerThread extends Thread {
 	            nbClients++;
 
 	            //premier contact
+	            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	            out = new PrintWriter(socket.getOutputStream());
 	            
 	            //envoi d'un message
-	            out = new PrintWriter(socket.getOutputStream());
 	            out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+" au numéro "+nbClients);
 	            out.flush();
 	            
 	            
-
-	            //traitement dans le temps après le premier contact
 	            String tampon;
-
-	            //réception des classes du client
-            	//réception des poissons du client
 	            
-	            do{		            
-	            	in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	            //FONCTIONNE PAS
+	            
+	            //réception des classes du client
+            	tampon = in.readLine();
+            	System.out.println(tampon);
+            	int nbr = Integer.parseInt(tampon);
+
+            	System.out.println("nb elements recus : "+nbr);
+            	for(int i = 1; i<=nbr;i++){
+            		tampon = in.readLine();
+            		System.out.println("position "+i+" contenu : "+tampon);
+            		aqua.addClasses(nbClients,tampon, "image/polochon.jpg");
+            	}
+            	
+            	
+            	//réception des poissons du client
+            	tampon = in.readLine();
+            	nbr = Integer.parseInt(tampon);
+            	System.out.println("nb poissons recus : "+nbr);
+            	for(int i = 0; i<nbr;i++){
+            		tampon = in.readLine();
+            		System.out.println("poissons : "+tampon);
+            		String[] contenu = tampon.split("!");
+            		aqua.addOther(new Mobiles(nbClients,Integer.parseInt(contenu[0]),Integer.parseInt(contenu[1]),Integer.parseInt(contenu[2]),Integer.parseInt(contenu[3]), Integer.parseInt(contenu[4]),contenu[5]));
+            	}
+  
+            	
+            	
+            	
+            	
+            	
+
+	            /*
+	            //traitement dans le temps après le premier contact
+	            do{
 		            tampon = in.readLine();
 		            synchronized(o){
 		            	traiterReception(tampon);
@@ -76,7 +100,7 @@ public class ServerThread extends Thread {
 	            	
 	            	
 	            }while(Protocole1.decode(tampon) != 0);
-	            
+	            */
 	            socket.close();
 	               
 	       	}

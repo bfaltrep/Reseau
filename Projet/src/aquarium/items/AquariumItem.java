@@ -66,7 +66,7 @@ public abstract class AquariumItem {
 		this.width = (int) (this.width * ratio);
 		this.height = (int) (this.height * ratio);
 	}
-
+	
 	/**
 	 * Draw the Aquarium Item into the graphic component g at its current
 	 * position
@@ -146,5 +146,8 @@ public abstract class AquariumItem {
 	public int getWidth() {
 		return width;
 	}
-
+	
+	public int getHeight() {
+		return height;
+	}
 }

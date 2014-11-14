@@ -1,24 +1,8 @@
 package aquarium;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-
-
-
-
-import java.net.Socket;
-import java.nio.charset.Charset;
-import java.util.HashSet;
-import java.util.Set;
-
-
-//import aquarium.gui.AquariumWindow;
-import aquarium.gui.Aquarium;
-import aquarium.gui.AquariumWindow;
 
 /**
  * Starting point of the Aquarium application
@@ -33,8 +17,12 @@ public class Main  {
 	 */
 	public static void main(String[] args) throws IOException {
 		System.out.println("hello");
-		System.out.println(args[0].matches(InetAddress.getLocalHost().toString()));
 		if(args[0].matches("localhost")){ // || args[0].matches(InetAddress.getLocalHost().toString())){
+			
+			
+			
+			
+			
 			System.out.println("serveur "+InetAddress.getLocalHost()+" "+args[1]);
 			ServerSocket serveur;
 			

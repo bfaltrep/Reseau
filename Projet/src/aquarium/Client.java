@@ -11,7 +11,6 @@ import java.util.List;
 
 import aquarium.gui.Aquarium;
 import aquarium.gui.AquariumWindow;
-import aquarium.items.AquariumItem;
 
 public class Client extends Thread {
 	//reseau - communication
@@ -46,21 +45,18 @@ public class Client extends Thread {
 			//envoi des classes
 			int i= 0;
 			int total = a.ClassesNbPourClient(0);
-			out.print(total+"!");
+			out.println(total);
 			while(i < total){
 				out.println(a.getClasse(i).getNom()); //envoi d'une classe, MODIF après gestion de l'image
-				out.flush();
 				i++;
 			}
 			
 			//envoi des poissons
 			List<String> mobils =  a.StringMobileItems();
-			out.print(mobils.size()+"!");
+			out.println(mobils.size());
 			for(int j = 0;i<mobils.size();i++){
-				out.println(mobils.get(j)); //envoi d'une classe, MODIF après gestion de l'image
-				out.flush();
+				out.println(mobils.get(j));
 			}
-			
 			
 			//reception des poissons des autres
 			
