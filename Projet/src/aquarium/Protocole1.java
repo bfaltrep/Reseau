@@ -11,6 +11,15 @@ public class Protocole1 {
 	//Image ... je sais pas =='
 
 	//je vois pas comment transferer l'image
+	
+	/*code : 
+		0 transfert ?
+		1 transfert classe
+		2 transfert poisson
+		3 transfert ? kill ?
+		4 transfert position poisson 
+		5 transfert ?
+	*/
 
 	public static byte[] encodeFishByte(int type, int fishId, String name, int width, int height, int x, int y) {
 			if (type == 0)
@@ -43,7 +52,7 @@ public class Protocole1 {
 				String result = type + "!";
 				return result.getBytes();
 			}
-			return "";
+			return "".getBytes();
 	}
 	
 	public static String encodeFishString(int width, int height, String name, int x, int y) {
@@ -83,6 +92,6 @@ public class Protocole1 {
 		String fishName = "DorisFish";
 		
 		//byte tmp[] = encodeFishByte(width, height, fishName, xPos, yPos);
-		decodeFishByte(tmp);
+		//decodeFishByte(tmp);
 	}
 }
