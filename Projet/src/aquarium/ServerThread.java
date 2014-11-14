@@ -1,5 +1,6 @@
 package aquarium;
 
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,14 +18,9 @@ import aquarium.gui.AquariumWindow;
 import aquarium.items.AquariumItem;
 import aquarium.Protocole1;
 
-public class ServerThread extends Thread {
-	//pour l'aquarium
-	private static Aquarium aqua;
-	private static List<Mobiles> poissons;
-	private static List<ElementImage> classes;
-	
-	
+public class ServerThread extends Thread {	
 	private Object o = new Object();
+	private Aquarium aqua;
 	
 	//gestion des clients
 	private ServerSocket socketserver;
@@ -38,16 +34,15 @@ public class ServerThread extends Thread {
 	//pour les tests
 	private int nbClients;
 	  
-	public ServerThread(ServerSocket s, Aquarium aqua){
+	public ServerThread(ServerSocket s){
+		aqua = new Aquarium();
 		socketserver = s;
-		this.aqua = aqua;
 		clients = new HashSet<Socket>();
 	}
 	
 	public void run() {
 
 		try {
-			poissons = new ArrayList<Mobiles>();
 			AquariumWindow animation = new AquariumWindow(aqua);
 			animation.displayOnscreen();
 			
@@ -56,9 +51,7 @@ public class ServerThread extends Thread {
 	       		clients.add(socket);
 	       		System.out.println("Le client n° "+nbClients+" est connecté. ");
 	            nbClients++;
-	              
-	     
-	            
+
 	            //premier contact
 	            
 	            //envoi d'un message
@@ -66,10 +59,11 @@ public class ServerThread extends Thread {
 	            out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+" au numéro "+nbClients);
 	            out.flush();
 	            
-	            String tampon;
 	            
+
 	            //traitement dans le temps après le premier contact
-	            
+	            String tampon;
+
 	            //réception des classes du client
             	//réception des poissons du client
 	            

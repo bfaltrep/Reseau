@@ -42,8 +42,7 @@ public class Main  {
 			try{
 				
 			serveur = new ServerSocket(Integer.parseInt(args[1]));
-			Aquarium aqua = new Aquarium();
-			Thread t = new ServerThread(serveur, aqua);
+			Thread t = new ServerThread(serveur);
 			t.start();
 			
 			}catch(IOException e){

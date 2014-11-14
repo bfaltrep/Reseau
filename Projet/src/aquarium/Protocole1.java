@@ -1,7 +1,5 @@
 package aquarium;
 
-import java.awt.Image;
-import java.awt.Point;
 import java.io.UnsupportedEncodingException;
 
 public class Protocole1 {
@@ -55,8 +53,9 @@ public class Protocole1 {
 			return "".getBytes();
 	}
 	
-	public static String encodeFishString(int width, int height, String name, int x, int y) {
-		return width + "!" + height + "!" + x + "!" + y + "!" + name;
+	// !! \\
+	public static String encodeFishString(int id, int width, String name, int x, int y) {
+		return id + "!" + width + "!" + "!" + x + "!" + y + "!" + name;
 	}
 
 	public static void decodeFishByte(byte input[]) throws UnsupportedEncodingException {
@@ -90,6 +89,7 @@ public class Protocole1 {
 		int xPos = 6;
 		int yPos = 7;
 		String fishName = "DorisFish";
+		System.out.println(width + height + xPos + yPos + fishName); // retirer les warnings
 		
 		//byte tmp[] = encodeFishByte(width, height, fishName, xPos, yPos);
 		//decodeFishByte(tmp);

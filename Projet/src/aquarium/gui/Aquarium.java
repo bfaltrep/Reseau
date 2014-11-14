@@ -3,13 +3,15 @@ package aquarium.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JPanel;
 
+import aquarium.ElementImage;
+import aquarium.Mobiles;
+import aquarium.Protocole1;
 import aquarium.items.AquariumItem;
 import aquarium.items.DorisFish;
 import aquarium.items.StableFish;
@@ -78,9 +80,17 @@ public class Aquarium extends JPanel {
 	 */
 	private List<AquariumItem> items = new ArrayList<AquariumItem>();
 
-	private List<AquariumItem> others = new ArrayList<AquariumItem>();
+	private List<ElementImage> classes = new ArrayList<ElementImage>();
+			
+	private List<Mobiles> others = new ArrayList<Mobiles>();
+	
+	
 	
 	public Aquarium() {
+
+		classes.add(new ElementImage(0,"StableFish",StableFish.getImageClasse()));
+		classes.add(new ElementImage(0,"DorisFish", DorisFish.getImageClasse()));
+		
 		for (int i = 0; i < NB_STONES; i++) {
 			AquariumItem ai = new Seastone();
 			if (ai.sink(items))
@@ -93,6 +103,7 @@ public class Aquarium extends JPanel {
 		}
 		for (int i = 0; i < NB_FISH; i++) {
 			AquariumItem ai = new StableFish();
+			
 			if (ai.sink(items))
 				items.add(ai);
 		}
@@ -172,4 +183,107 @@ public class Aquarium extends JPanel {
 		this.repaint();
 	}
 
+	
+	
+	
+	public List<String> StringMobileItems(){
+		List<String> res = new ArrayList<String>();
+		int i = 0;
+		Iterator<AquariumItem> it = items.iterator();
+		while (it.hasNext()) {
+			AquariumItem tmp = it.next();
+			if(tmp instanceof MobileItem){
+				i++;
+				String name = ((MobileItem) tmp).getClasse();
+				res.add(Protocole1.encodeFishString(i,tmp.getWidth(),name, tmp.getPosition().x, tmp.getPosition().y));
+			}
+		}
+		return res;
+	}
+	
+	
+	public void addClasses(int idC, String nom, String image){
+		classes.add(new ElementImage(idC,nom,image));
+	}
+	
+	/**
+	 * retourne l'élément se trouvant à l'index i de la liste des éléments.
+	 * @param i
+	 * @return
+	 */
+	public ElementImage getClasse(int i){
+		return classes.get(i);
+	}
+	
+	/**
+	 * retourne le nombre de classes existantes pour ce client
+	 * 
+	 * **/
+	public int ClassesNbPourClient(int idClient){
+		int nb = 0;
+		Iterator<ElementImage> it = classes.iterator(); 
+		while (it.hasNext()) {
+			ElementImage tmp = it.next();
+			if(tmp.getidClient() == idClient){
+				nb++;
+			}
+		}
+		return nb;
+	}
+	
+	public void ClassesSupprMultiple(int idC){
+		Iterator<ElementImage> it = classes.iterator(); 
+		while (it.hasNext()) {
+			ElementImage tmp = it.next();
+			if(tmp.getidClient() == idC){
+				it.remove();
+			}
+		}	
+	}
+	
+	public void addOther(int idC, int idP, MobileItem pois, String clas){
+		others.add(new Mobiles(idC, idP, pois, clas));
+	}
+	
+	public void addOther(Mobiles m){
+		others.add(m);
+	}
+	
+	public void getOtherP(){
+		//a construire en fonction des usages, pour le moment j'en trouve pas
+	}
+	
+	private int parcourirOther (int client, int idPoisson){
+		for(int i = 0;i<others.size(); i++){
+			if(others.get(i).getIdClient() == client && others.get(i).getIdPoisson() == idPoisson){
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public void OtherSupprSimple(int client, int idPoisson){
+		int index = parcourirOther (client,idPoisson);
+		if(index != -1){
+			others.remove(index);
+		}
+	}
+	
+	public void OtherModifPositionSimple(int client, int idPoisson, int x, int y){
+		int index = parcourirOther (client,idPoisson);
+		if(index != -1){
+			others.get(index).modifierPosition(x, y);
+		}
+	}
+	
+	public void OtherSupprMultiple(int client){
+		Iterator<Mobiles> it = others.iterator(); 
+		while (it.hasNext()) {
+			Mobiles tmp = it.next();
+			if(tmp.getIdClient() == client){
+				it.remove();
+			}
+		}	
+	}
+	
 }

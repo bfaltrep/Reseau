@@ -5,8 +5,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -88,7 +86,7 @@ public abstract class AquariumItem {
 	public void setPosition(Point p) {
 		position = p;
 	}
-
+	
 	/**
 	 * @return the current Position of the Aquarium Item
 	 */

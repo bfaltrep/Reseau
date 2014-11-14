@@ -17,7 +17,15 @@ public class DorisFish extends StableFish {
 		super(width);
 		setBehavior();
 	}
-
+	
+	public String getClasse(){
+		return "DorisFish";
+	}
+	
+	public static String getImageClasse(){
+		return img;
+	}
+	
 	private void setBehavior(){
 		ScheduledExecutorService e = Executors.newScheduledThreadPool(1);
 		e.scheduleWithFixedDelay(new Runnable() {

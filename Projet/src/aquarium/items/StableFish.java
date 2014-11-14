@@ -36,10 +36,19 @@ public class StableFish extends MobileItem {
 		return MAX_WIDTH;
 	}
 	
-	public String getImage(){
+	public String getClasse(){
+		return "StableFish";
+	}
+	
+	public static String getImageClasse(){
+		return img;
+	}
+	
+	public static String getImage(){
 		return img;
 	}
 
+	
 	protected void setTarget(AquariumItem a){
 		target=a;
 	}
