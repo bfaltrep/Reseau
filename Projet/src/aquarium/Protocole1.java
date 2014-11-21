@@ -13,8 +13,12 @@ public class Protocole1 {
 	// je vois pas comment transferer l'image
 
 	/*
-	 * code : 0 transfert ? 1 transfert classe 2 transfert poisson 3 transfert ?
-	 * kill ? 4 transfert position poisson 5 transfert ?
+	 * 0: Déconnexion
+	 * 1: Connexion
+	 * 2: Créer poisson
+	 * 3: Tuer poisson
+	 * 4: Bouger poisson
+	 * 5: ??????????
 	 */
 
 	public static byte[] encodeFishByte(int type, int fishId, String name, int width, int height, int x, int y) {
