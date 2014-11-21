@@ -46,10 +46,8 @@ public class Client extends Thread {
 			int i= 0;
 			int total = a.ClassesNbPourClient(0);
 			out.println(total);
-			System.out.println(total);
 			out.flush();
 			while(i < total){
-				System.out.println(a.getClasse(i).getNom());
 				out.println(a.getClasse(i).getNom()); //envoi d'une classe, MODIF après gestion de l'image
 				out.flush();
 				i++;
@@ -58,8 +56,10 @@ public class Client extends Thread {
 			//envoi des poissons
 			List<String> mobils =  a.StringMobileItems();
 			out.println(mobils.size());
+			System.out.println(mobils.size());
 			out.flush();
 			for(int j = 0;i<mobils.size();i++){
+				System.out.println(mobils.get(j));
 				out.println(mobils.get(j));
 				out.flush();
 			}
