@@ -16,7 +16,7 @@ import aquarium.items.Mobiles;
 import aquarium.Protocole1;
 
 public class ServerThread extends Thread {	
-	//private Object o = new Object();
+	private Object o = new Object();
 	private Aquarium aqua;
 	
 	//gestion des clients
@@ -57,9 +57,7 @@ public class ServerThread extends Thread {
 	            
 	            
 	            String tampon;
-	            
-	            //FONCTIONNE PAS
-	            
+
 	            //réception des classes du client
             	tampon = in.readLine();
             	int nbr = Integer.parseInt(tampon);
@@ -76,28 +74,30 @@ public class ServerThread extends Thread {
             	System.out.println("nb poissons recus : "+nbr);
             	for(int i = 0; i<nbr;i++){
             		tampon = in.readLine();
-            		System.out.println("poissons : "+tampon);
+            		System.out.println("poisson "+i+": "+tampon);
             		String[] contenu = tampon.split("!");
-            		aqua.addOther(new Mobiles(nbClients,Integer.parseInt(contenu[0]),Integer.parseInt(contenu[1]),Integer.parseInt(contenu[2]),Integer.parseInt(contenu[3]), Integer.parseInt(contenu[4]),contenu[5]));
+            		//tmp gestion image/nom
+            		aqua.addOther(new Mobiles(nbClients,
+            				Integer.parseInt(contenu[0]),Integer.parseInt(contenu[1]),Integer.parseInt(contenu[2]),
+            				Integer.parseInt(contenu[3]), Integer.parseInt(contenu[4]),aqua.getClasse(aqua.getClasseIndex(contenu[5])).getImages()));
             	}
   
             	
+            	//envoi des poissons des autres
             	
             	
             	
             	
 
-	            /*
-	            //traitement dans le temps après le premier contact
-	            do{
+	            
+	            //tant qu'il n'a pas le message qui indique que le client se déconnecte.
+	            /*while(Protocole1.decode(tampon) != 0){
 		            tampon = in.readLine();
 		            synchronized(o){
-		            	traiterReception(tampon);
+		            	traiterReceptionPositions(tampon);
 		            }
-	            	
-	            	
-	            }while(Protocole1.decode(tampon) != 0);
-	            */
+            
+	            }*/
 	            socket.close();
 	               
 	       	}
@@ -118,68 +118,13 @@ public class ServerThread extends Thread {
 	 */
 	
 	//traiter les cas de contenu du message
-	boolean traiterReception(String s){
-		if(Protocole1.decode(s) == 0){
-			//a definir
-		}else if(Protocole1.decode(s) == 1){
-			
-		}else if(Protocole1.decode(s) == 2){
-			
-		}else if(Protocole1.decode(s) == 3){
-			
-		}else if(Protocole1.decode(s) == 4){
-			
-		}else if(Protocole1.decode(s) == 5){
-			//a definir
-		}
+	boolean traiterReceptionPositions(String s){
+		
 		return true;
 	}
 	
 	boolean traiterEnvoi(){
 		return true;
 	}
-	
-	
-	
-	/*Socket so;
-	Set<Socket> set;
-	Aquarium aqua;
-	
-	
-	public MonThread(Socket s,Set t, Aquarium a) throws IOException{
-		so = s;
-		set = t;
-		aqua = a;
-	}
-	
-	public void run(){
-		try {
-			System.out.println("thread créé");
-			byte inputTab[] = new byte [1024];
-			byte outputTab[] = new byte [1024];
-			
-			String welcomeMessage = "Bonjour Client !";
-			//réception poissons du nouveau client
-			//envoyer les poissons supplémentaire
-			
-
-			OutputStream os = so.getOutputStream();
-			os.write(welcomeMessage.getBytes(Charset.forName("UTF-8")));
-
-			while(true){
-				InputStream is = so.getInputStream();
-
-				BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
-				while(true){
-					String str = br.readLine();
-					System.out.println(str);
-				}
-			}
-			//so.close();
-			
-		} catch (IOException e){
-				e.printStackTrace();
-		}
-	}*/
 		
 }

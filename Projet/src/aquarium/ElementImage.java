@@ -9,13 +9,12 @@ public class ElementImage {
 	private Image image;
 	private String nom;
 	
-	public ElementImage(int idC, String s, String i){
+	public ElementImage(int idC, String img, String n){
 		idClient = idC;
-		imageS = s;
-		image = Toolkit.getDefaultToolkit().createImage(
-				ClassLoader.getSystemResource(i));
+		imageS = img;
+		image = Toolkit.getDefaultToolkit().createImage(ClassLoader.getSystemResource(img));
 		//ImageIcon icon = new ImageIcon(image); verifier l'utilité
-		nom = s;
+		nom = n;
 	} 
 	
 	public int getidClient(){

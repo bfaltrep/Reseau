@@ -11,7 +11,6 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import aquarium.ElementImage;
-import aquarium.Protocole1;
 import aquarium.items.AquariumItem;
 import aquarium.items.DorisFish;
 import aquarium.items.Mobiles;
@@ -89,8 +88,8 @@ public class Aquarium extends JPanel {
 	
 	public Aquarium() {
 
-		classes.add(new ElementImage(0,"StableFish",StableFish.getImageClasse()));
-		classes.add(new ElementImage(0,"DorisFish", DorisFish.getImageClasse()));
+		classes.add(new ElementImage(0,StableFish.getImageClasse(),"StableFish"));
+		classes.add(new ElementImage(0,DorisFish.getImageClasse(),"DorisFish"));
 		
 		for (int i = 0; i < NB_STONES; i++) {
 			AquariumItem ai = new Seastone();
@@ -128,7 +127,7 @@ public class Aquarium extends JPanel {
 	public static int getSizeY() {
 		return SIZE_AQUA_Y;
 	}
-
+	
 	/**
 	 * 
 	 * @param i, an integer between [0, number of items of the aquarium]
@@ -146,6 +145,8 @@ public class Aquarium extends JPanel {
 		for (AquariumItem item : items)
 			if (item instanceof MobileItem)
 				((MobileItem) item).move(items);
+		for(AquariumItem item : others)
+			((Mobiles) item).move();
 		updateScreen();
 	}
 
@@ -181,28 +182,39 @@ public class Aquarium extends JPanel {
 		for (AquariumItem aquariumItem : items) {
 			aquariumItem.draw(graphicContext);
 		}
+		for (AquariumItem aquariumItem : others) {
+			aquariumItem.draw(graphicContext);
+		}
 		this.repaint();
 	}
 
 	
 	
 	
-	public List<String> StringMobileItems(){
-		List<String> res = new ArrayList<String>();
-		int i = 0;
-		Iterator<AquariumItem> it = items.iterator();
-		while (it.hasNext()) {
-			AquariumItem tmp = it.next();
-			if(tmp instanceof MobileItem){
-				i++;
-				String name = ((MobileItem) tmp).getClasse();
-				res.add(Protocole1.encodeFishString(i,tmp.getWidth(),tmp.getHeight() ,tmp.getPosition().x, tmp.getPosition().y,name));
-			}
+	
+	
+	
+	
+	//methodes de gestion des listes
+	
+	public int getNbMobileItems(){
+		int nb = items.size();
+		for(int i =0;i<nb;i++){
+			System.out.println();
+			
 		}
-		return res;
+		
+		return nb;
 	}
+		
+	//gestion Classes
 	
-	
+	/**
+	 * Ajouter une classe dans la liste des classes de cet aquarium
+	 * @param idC identifiant du client
+	 * @param nom nom de la classe
+	 * @param image adresse de l'image
+	 */
 	public void addClasses(int idC, String nom, String image){
 		classes.add(new ElementImage(idC,nom,image));
 	}
@@ -221,7 +233,7 @@ public class Aquarium extends JPanel {
 		Iterator<ElementImage> it = classes.iterator(); 
 		while (it.hasNext()) {
 			ElementImage tmp = it.next();
-			if(tmp.getNom() == s){
+			if(tmp.getNom().matches(s)){
 				return index;
 			}
 		}
@@ -254,12 +266,10 @@ public class Aquarium extends JPanel {
 		}	
 	}
 	
+	//gestion Others
+	
 	public void addOther(Mobiles m){
 		others.add(m);
-	}
-	
-	public void getOtherP(){
-		//a construire en fonction des usages, pour le moment j'en trouve pas
 	}
 	
 	private int parcourirOther (int client, int idPoisson){

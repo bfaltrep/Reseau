@@ -7,10 +7,13 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import aquarium.gui.Aquarium;
 import aquarium.gui.AquariumWindow;
+import aquarium.items.AquariumItem;
+import aquarium.items.MobileItem;
 
 public class Client extends Thread {
 	//reseau - communication
@@ -54,20 +57,37 @@ public class Client extends Thread {
 			}
 			
 			//envoi des poissons
-			List<String> mobils =  a.StringMobileItems();
-			out.println(mobils.size());
-			System.out.println(mobils.size());
+			int nbMobileItems =  a.getNbMobileItems();
+			System.out.println(nbMobileItems);
+			out.println(nbMobileItems);
 			out.flush();
-			for(int j = 0;i<mobils.size();i++){
-				System.out.println(mobils.get(j));
-				out.println(mobils.get(j));
-				out.flush();
+			for(int j = 0;j<nbMobileItems;j++){
+				AquariumItem ai = a.getAquariumItem(j);
+				if(ai instanceof MobileItem){
+					String name = ((MobileItem) ai).getClasse();
+					out.println(Protocole1.encodeFishString(j,ai.getWidth(),ai.getHeight() ,ai.getPosition().x, ai.getPosition().y,name));
+					out.flush();
+				}
 			}
 			
 			//reception des poissons des autres
 			
+			//envoi des positions des autres
+			
+			//Timer time = new Timer();
+			//TimerTask task = new TimerTask();
 			
 			
+			
+			
+			
+/*
+				for(int j = 0;j<nbMobileItems;j++){
+					AquariumItem ai = a.getAquariumItem(j);
+					out.println(j+"!"+ai.getPosition().x+"!"+ai.getPosition().y);
+					out.flush();
+				}
+				*/
 			socket.close();
 		}catch(UnknownHostException e){
 			e.printStackTrace();
@@ -75,41 +95,5 @@ public class Client extends Thread {
 			e.printStackTrace();
 		}		
 	}
-	
-	/*
-	public static void main(String[] args) {
-		Socket socket;
-		BufferedReader in;
-		PrintWriter out;
-		Aquarium a ;
-		
-		
-		try{
-			socket = new Socket (InetAddress.getLocalHost(),8888);
-			System.out.println("demande de connexion ");
-			
-			//MESSAGE DE BIENVENUE DANS L AQUARIUM
-			// réception > InputStream > ISReader > BufferedReader
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			String message = in.readLine();
-			System.out.println(message);
-			
-			a = new Aquarium();
-			AquariumWindow animation = new AquariumWindow(a);
-			animation.displayOnscreen();
-
-			
-			//envoi d'un message
-			out = new PrintWriter(socket.getOutputStream());
-			out.println(" bonjour, merci de me transmettre l'aquarium");
-			out.flush();
-			
-			socket.close();
-		}catch(UnknownHostException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-	}*/
 
 }

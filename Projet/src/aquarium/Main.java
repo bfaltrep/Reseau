@@ -18,15 +18,10 @@ public class Main  {
 	public static void main(String[] args) throws IOException {
 		System.out.println("hello");
 		if(args[0].matches("localhost")){ // || args[0].matches(InetAddress.getLocalHost().toString())){
-			
-			
-			
-			
-			
+
 			System.out.println("serveur "+InetAddress.getLocalHost()+" "+args[1]);
 			ServerSocket serveur;
 			
-					
 			try{
 				
 			serveur = new ServerSocket(Integer.parseInt(args[1]));

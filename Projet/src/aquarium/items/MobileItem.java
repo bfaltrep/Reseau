@@ -94,6 +94,11 @@ public abstract class MobileItem extends AquariumItem {
 			destination = getNewTarget(neighbours);
 		move();
 	}
-	
+
+	/**
+	 * @return the String class of the Item
+	 */
 	public abstract String getClasse();
+	 
+
 }
