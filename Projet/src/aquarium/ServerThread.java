@@ -62,10 +62,9 @@ public class ServerThread extends Thread {
 	            
 	            //réception des classes du client
             	tampon = in.readLine();
-            	System.out.println(tampon);
+            	System.out.println("classe nb :"+tampon);
             	int nbr = Integer.parseInt(tampon);
 
-            	System.out.println("nb elements recus : "+nbr);
             	for(int i = 1; i<=nbr;i++){
             		tampon = in.readLine();
             		System.out.println("position "+i+" contenu : "+tampon);
