@@ -1,5 +1,9 @@
 package aquarium.util;
 
 public enum Constante {
-READONLY,WRITEONLY, 
+	DECONNECT,
+	CONNECT,
+	NEWFISH,
+	KILLFISH,
+	MOVEFISH	
 }
