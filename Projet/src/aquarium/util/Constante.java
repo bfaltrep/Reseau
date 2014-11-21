@@ -5,5 +5,6 @@ public enum Constante {
 	CONNECT,
 	NEWFISH,
 	KILLFISH,
-	MOVEFISH	
+	MOVEFISH,
+	NEWCLASS
 }

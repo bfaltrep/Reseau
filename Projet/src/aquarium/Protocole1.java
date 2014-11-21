@@ -18,17 +18,19 @@ public class Protocole1 {
 	 * 2: Créer poisson
 	 * 3: Tuer poisson
 	 * 4: Bouger poisson
-	 * 5: ??????????
+	 * 5: Nouvelle classe
 	 */
 
-	public static byte[] encodeFishByte(int type, int fishId, String name, int width, int height, int x, int y) {
+	
+	//TODO: Se référer à Client.java pour savoir comment récupérer les variables de l'aquarium
+	public static byte[] encodeFishByte(int type, Aquarium aquarium) {
 		String result;
 		switch(type) {
 			case 0:
 				result = type + "!";
 				return result.getBytes();
 			case 1:
-				result = type + "!" + name;
+				result = type + "!";
 				return result.getBytes();
 			case 2:
 				result = type + "!" + fishId + "!" + width + "!" + height + "!" + x + "!" + y;
