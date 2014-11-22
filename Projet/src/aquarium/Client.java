@@ -7,8 +7,11 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import aquarium.gui.Aquarium;
 import aquarium.gui.AquariumWindow;
@@ -46,48 +49,47 @@ public class Client extends Thread {
 			animation.displayOnscreen();
 			
 			//envoi des classes
-			int i= 0;
 			int total = a.ClassesNbPourClient(0);
 			out.println(total);
 			out.flush();
-			while(i < total){
+			for(int i = 0;i < total;i++){
 				out.println(a.getClasse(i).getNom()); //envoi d'une classe, MODIF après gestion de l'image
 				out.flush();
-				i++;
 			}
 			
 			//envoi des poissons
-			int nbMobileItems =  a.getNbMobileItems();
-			System.out.println(nbMobileItems);
-			out.println(nbMobileItems);
+			List<Integer> MobileItems =  a.getNBMobileItems();
+			int taille = MobileItems.size();
+			out.println(taille);
 			out.flush();
-			for(int j = 0;j<nbMobileItems;j++){
-				AquariumItem ai = a.getAquariumItem(j);
-				if(ai instanceof MobileItem){
-					String name = ((MobileItem) ai).getClasse();
-					out.println(Protocole1.encodeFishString(j,ai.getWidth(),ai.getHeight() ,ai.getPosition().x, ai.getPosition().y,name));
-					out.flush();
-				}
+			for(int j = 0;j<taille;j++){
+				AquariumItem ai = a.getAquariumItem(MobileItems.get(j));
+				String name = ((MobileItem) ai).getClasse();
+				out.println(Protocole1.encodeFishString(j,ai.getWidth(),ai.getHeight() ,ai.getPosition().x, ai.getPosition().y,name));
+				out.flush();
 			}
 			
 			//reception des poissons des autres
 			
-			//envoi des positions des autres
-			
-			//Timer time = new Timer();
-			//TimerTask task = new TimerTask();
-			
-			
-			
-			
-			
-/*
-				for(int j = 0;j<nbMobileItems;j++){
-					AquariumItem ai = a.getAquariumItem(j);
-					out.println(j+"!"+ai.getPosition().x+"!"+ai.getPosition().y);
+			//comportement dans le temps			
+			ScheduledExecutorService es = Executors.newScheduledThreadPool(1);
+			es.scheduleWithFixedDelay(new Runnable() {
+				
+				public void run() {
+					//envoi des positions toutes les secondes
+					List<Integer> MobileItems =  a.getNBMobileItems();
+					int taille = MobileItems.size();
+					out.println(taille);
 					out.flush();
+					for(int j = 0;j<taille;j++){
+						AquariumItem ai = a.getAquariumItem(MobileItems.get(j));
+						out.println(j+"!"+ai.getPosition().x+"!"+ai.getPosition().y);
+						out.flush();
+					}
+					
 				}
-				*/
+			}, 0, 1, TimeUnit.SECONDS);
+			
 			socket.close();
 		}catch(UnknownHostException e){
 			e.printStackTrace();

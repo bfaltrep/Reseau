@@ -24,8 +24,7 @@ import aquarium.items.Seaweed;
  * order to display graphical elements.
  */
 public class Aquarium extends JPanel {
-	
-	
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -59,13 +58,12 @@ public class Aquarium extends JPanel {
 	 * "Fish items" to be displayed in the Aquarium
 	 */
 	private static final int NB_FISH = 5;
-
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
 	private static final int NB_DORISFISH = 5;
-	
+
 	/**
 	 * Pixel data buffer for the Aquarium rendering
 	 */
@@ -197,16 +195,20 @@ public class Aquarium extends JPanel {
 	
 	//methodes de gestion des listes
 	
-	public int getNbMobileItems(){
-		int nb = items.size();
-		for(int i =0;i<nb;i++){
-			System.out.println();
-			
+	/**
+	 * @return le nombre d'éléments mobiles dans l'aquarium qui sont créés par cet aquarium
+	 */
+	public List<Integer> getNBMobileItems(){
+		List<Integer> tmp = new ArrayList<Integer>();
+		for (int j = 0;j< items.size();j++){
+			AquariumItem item = items.get(j);
+			if (item instanceof MobileItem)
+				tmp.add(j);
 		}
-		
-		return nb;
+		return tmp;
 	}
-		
+	
+	
 	//gestion Classes
 	
 	/**
@@ -215,6 +217,7 @@ public class Aquarium extends JPanel {
 	 * @param nom nom de la classe
 	 * @param image adresse de l'image
 	 */
+
 	public void addClasses(int idC, String nom, String image){
 		classes.add(new ElementImage(idC,nom,image));
 	}
@@ -256,6 +259,10 @@ public class Aquarium extends JPanel {
 		return nb;
 	}
 	
+	/**
+	 * supprimer tous les poissons du client idC
+	 * @param idC
+	 */
 	public void ClassesSupprMultiple(int idC){
 		Iterator<ElementImage> it = classes.iterator(); 
 		while (it.hasNext()) {
@@ -268,11 +275,21 @@ public class Aquarium extends JPanel {
 	
 	//gestion Others
 	
+	/**
+	 * ajouter un Mobiles dans others
+	 * @param m
+	 */
 	public void addOther(Mobiles m){
 		others.add(m);
 	}
 	
-	private int parcourirOther (int client, int idPoisson){
+	/**
+	 * parcourir others et retourner la position du poisson qui correspond aux id en paramètre
+	 * @param client
+	 * @param idPoisson
+	 * @return
+	 */
+	public int parcourirOther (int client, int idPoisson){
 		for(int i = 0;i<others.size(); i++){
 			if(others.get(i).getIdClient() == client && others.get(i).getIdPoisson() == idPoisson){
 				return i;

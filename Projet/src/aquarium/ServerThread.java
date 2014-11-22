@@ -9,9 +9,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import aquarium.gui.Aquarium;
 import aquarium.gui.AquariumWindow;
+import aquarium.items.AquariumItem;
 import aquarium.items.Mobiles;
 import aquarium.Protocole1;
 
@@ -23,7 +27,7 @@ public class ServerThread extends Thread {
 	private ServerSocket socketserver;
 	private Socket socket;
 	private static Set<Socket> clients;
-	private int nbClients;
+	private int nbClient;
 	
 	//entrées sorties 
 	private PrintWriter out;
@@ -36,23 +40,22 @@ public class ServerThread extends Thread {
 	}
 	
 	public void run() {
-
 		try {
 			AquariumWindow animation = new AquariumWindow(aqua);
 			animation.displayOnscreen();
-			
 			while(true){
 	       		socket = socketserver.accept(); // Un client se connecte on l'accepte
 	       		clients.add(socket);
-	       		System.out.println("Le client n° "+nbClients+" est connecté. ");
-	            nbClients++;
+	       		System.out.println(clients);
+	       		nbClient = clients.size();
+	       		System.out.println("Le client n° "+nbClient+" est connecté. ");
 
 	            //premier contact
 	            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	            out = new PrintWriter(socket.getOutputStream());
 	            
 	            //envoi d'un message
-	            out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+" au numéro "+nbClients);
+	            out.println(" vous êtes bien dans l'aquarium de "+socket.getLocalAddress()+" au numéro "+nbClient);
 	            out.flush();
 	            
 	            
@@ -64,20 +67,18 @@ public class ServerThread extends Thread {
 
             	for(int i = 1; i<=nbr;i++){
             		tampon = in.readLine();
-            		aqua.addClasses(nbClients,tampon, "image/polochon.jpg");
+            		aqua.addClasses(nbClient,tampon, "image/polochon.jpg");
             	}
             	
             	
             	//réception des poissons du client
             	tampon = in.readLine();
             	nbr = Integer.parseInt(tampon);
-            	System.out.println("nb poissons recus : "+nbr);
             	for(int i = 0; i<nbr;i++){
             		tampon = in.readLine();
-            		System.out.println("poisson "+i+": "+tampon);
             		String[] contenu = tampon.split("!");
             		//tmp gestion image/nom
-            		aqua.addOther(new Mobiles(nbClients,
+            		aqua.addOther(new Mobiles(nbClient,
             				Integer.parseInt(contenu[0]),Integer.parseInt(contenu[1]),Integer.parseInt(contenu[2]),
             				Integer.parseInt(contenu[3]), Integer.parseInt(contenu[4]),aqua.getClasse(aqua.getClasseIndex(contenu[5])).getImages()));
             	}
@@ -87,7 +88,28 @@ public class ServerThread extends Thread {
             	
             	
             	
-            	
+    			//comportement dans le temps			
+    			ScheduledExecutorService es = Executors.newScheduledThreadPool(1);
+    			es.scheduleWithFixedDelay(new Runnable() {
+    				
+    				public void run() {
+    					//réception des positions toutes les secondes
+    					String tampon;
+						try {
+							tampon = in.readLine();
+	    					int nbr = Integer.parseInt(tampon);
+	    					for(int j = 0;j<nbr;j++){
+	    						tampon = in.readLine();
+	    						String[] contenu = tampon.split("!");    						
+	    						aqua.OtherModifPositionSimple(nbClient, Integer.parseInt(contenu[0]),Integer.parseInt(contenu[1]), Integer.parseInt(contenu[2]));
+	    						//out.println(j+"!"+ai.getPosition().x+"!"+ai.getPosition().y);
+	    					}								
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+    					
+    				}
+    			}, 0, 1, TimeUnit.SECONDS);
 
 	            
 	            //tant qu'il n'a pas le message qui indique que le client se déconnecte.
@@ -98,6 +120,9 @@ public class ServerThread extends Thread {
 		            }
             
 	            }*/
+            	
+            	
+            	
 	            socket.close();
 	               
 	       	}
