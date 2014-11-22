@@ -13,36 +13,41 @@ public class Protocole1 {
 	// je vois pas comment transferer l'image
 
 	/*
-	 * code : 0 transfert ? 1 transfert classe 2 transfert poisson 3 transfert ?
-	 * kill ? 4 transfert position poisson 5 transfert ?
+	 * 0: Déconnexion
+	 * 1: Connexion
+	 * 2: Créer poisson
+	 * 3: Tuer poisson
+	 * 4: Bouger poisson
+	 * 5: Nouvelle classe
 	 */
 
-	public static byte[] encodeFishByte(int type, int fishId, String name,
-			int width, int height, int x, int y) {
-		
-		if (type == 0) {
-			String result = type + "!";
-			return result.getBytes();
-		} else if (type == 1) {
-			String result = type + "!" + name;
-			return result.getBytes();
-		} else if (type == 2) {
-			String result = type + "!" + fishId + "!" + width + "!" + height
-					+ "!" + x + "!" + y;
-			return result.getBytes();
-		} else if (type == 3) {
-			String result = type + "!" + fishId;
-			return result.getBytes();
-		} else if (type == 4) {
-			String result = type + "!" + fishId + "!" + x + "!" + y;
-			return result.getBytes();
-		} else if (type == 5) {
-			String result = type + "!";
-			return result.getBytes();
+	
+	//TODO: Se référer à Client.java pour savoir comment récupérer les variables de l'aquarium
+	public static byte[] encodeFishByte(int type, Aquarium aquarium) {
+		String result;
+		switch(type) {
+			case 0:
+				result = type + "!";
+				return result.getBytes();
+			case 1:
+				result = type + "!";
+				return result.getBytes();
+			case 2:
+				result = type + "!" + fishId + "!" + width + "!" + height + "!" + x + "!" + y;
+				return result.getBytes();
+			case 3:
+				result = type + "!" + fishId;
+				return result.getBytes();
+			case 4:
+				result = type + "!" + fishId + "!" + x + "!" + y;
+				return result.getBytes();
+			case 5:
+				result = type + "!";
+				return result.getBytes();
+			default:
+				return "".getBytes();
 		}
-		return "".getBytes();
 	}
-
 	// !! \\
 	public static String encodeFishString(int id, int width, int height, int x,
 			int y, String name) {
