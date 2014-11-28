@@ -8,7 +8,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -49,16 +48,16 @@ public class Client extends Thread {
 			animation.displayOnscreen();
 			
 			//envoi des classes
-			int total = a.ClassesNbPourClient(0);
+			int total = a.nbOfClientClasses(0);
 			out.println(total);
 			out.flush();
 			for(int i = 0;i < total;i++){
-				out.println(a.getClasse(i).getNom()); //envoi d'une classe, MODIF après gestion de l'image
+				out.println(a.getClass(i).getNom()); //envoi d'une classe, MODIF après gestion de l'image
 				out.flush();
 			}
 			
 			//envoi des poissons
-			List<Integer> MobileItems =  a.getNBMobileItems();
+			List<Integer> MobileItems =  a.getNbOfMobileItems();
 			int taille = MobileItems.size();
 			out.println(taille);
 			out.flush();
@@ -77,7 +76,7 @@ public class Client extends Thread {
 				
 				public void run() {
 					//envoi des positions toutes les secondes
-					List<Integer> MobileItems =  a.getNBMobileItems();
+					List<Integer> MobileItems =  a.getNbOfMobileItems();
 					int taille = MobileItems.size();
 					out.println(taille);
 					out.flush();

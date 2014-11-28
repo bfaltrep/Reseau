@@ -19,7 +19,6 @@ import aquarium.gui.AquariumWindow;
 import aquarium.items.Mobiles;
 
 public class ServerThread extends Thread {
-	private Object o = new Object();
 	private Aquarium aqua;
 
 	// gestion des clients
@@ -38,7 +37,6 @@ public class ServerThread extends Thread {
 
 	public void run() {
 		try {
-
 			AquariumWindow animation = new AquariumWindow(aqua);
 			animation.displayOnscreen();
 
@@ -49,7 +47,7 @@ public class ServerThread extends Thread {
 				
 				myservice.execute(new Runnable() {
 
-					void firstContact(){
+					void firstContact() {
 						long id = Thread.currentThread().getId();
 						System.out.println(clients);
 						System.out.println("Le client n° " + id	+ " est connecté. ");
@@ -83,21 +81,16 @@ public class ServerThread extends Thread {
 							tampon = in.readLine();
 							String[] contenu = tampon.split("!");
 							// tmp gestion image/nom
-							aqua.addOther(new Mobiles(id, Integer
+							aqua.addObj(new Mobiles(id, Integer
 									.parseInt(contenu[0]), Integer
 									.parseInt(contenu[1]), Integer
 									.parseInt(contenu[2]), Integer
 									.parseInt(contenu[3]), Integer
-									.parseInt(contenu[4]), aqua.getClasse(
+									.parseInt(contenu[4]), aqua.getClass(
 											aqua.getClasseIndex(contenu[5]))
 											.getImages()));
 						}
-
 						// envoi des poissons des autres
-
-
-
-
 					}
 
 					@Override
@@ -112,24 +105,19 @@ public class ServerThread extends Thread {
 
 							private void send() {
 								//envoyer les modification de l'aquarium : position / ajout / suppression
-
-
-
 							}
 
 							private void receive(){
 								long id = Thread.currentThread().getId();
 
-
 								String tampon;
 								try {
-
 									tampon = in.readLine();
 									int nbr = Integer.parseInt(tampon);
 									for (int j = 0; j < nbr; j++) {
 										tampon = in.readLine();
 										String[] contenu = tampon.split("!");
-										aqua.OtherModifPositionSimple(id,
+										aqua.modifySingleClientObj(id,
 												Integer.parseInt(contenu[0]),
 												Integer.parseInt(contenu[1]),
 												Integer.parseInt(contenu[2]));
@@ -146,7 +134,6 @@ public class ServerThread extends Thread {
 								// réception des positions toutes les secondes
 								receive();
 								send();
-
 							}
 						}, 0, 1, TimeUnit.SECONDS);
 
@@ -159,8 +146,6 @@ public class ServerThread extends Thread {
 						 * 
 						 * }
 						 */
-
-
 					}
 				});
 			}
@@ -168,6 +153,5 @@ public class ServerThread extends Thread {
 			e.printStackTrace();
 			socket.close();
 		}
-
 	}
 }
