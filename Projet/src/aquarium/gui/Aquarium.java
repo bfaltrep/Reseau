@@ -188,10 +188,7 @@ public class Aquarium extends JPanel {
 
 	
 	
-	
-	
-	
-	
+
 	
 	//methodes de gestion des listes
 	
@@ -276,7 +273,7 @@ public class Aquarium extends JPanel {
 	//gestion Others
 	
 	/**
-	 * ajouter un Mobiles dans others
+	 * ajouter un Mobiles dans others. Soit un poisson venant d'un autre client.
 	 * @param m
 	 */
 	public void addOther(Mobiles m){
@@ -284,7 +281,7 @@ public class Aquarium extends JPanel {
 	}
 	
 	/**
-	 * parcourir others et retourner la position du poisson qui correspond aux id en paramètre
+	 * parcourir others et retourner la position du mobiles qui correspond aux id en paramètre
 	 * @param client
 	 * @param idPoisson
 	 * @return
@@ -298,6 +295,11 @@ public class Aquarium extends JPanel {
 		return -1;
 	}
 
+	/**
+	 * Supprimer un objet mobiles venant d'un autre client.
+	 * @param client
+	 * @param idPoisson
+	 */	
 	public void OtherSupprSimple(long client, int idPoisson){
 		int index = parcourirOther (client,idPoisson);
 		if(index != -1){
@@ -305,6 +307,13 @@ public class Aquarium extends JPanel {
 		}
 	}
 	
+	/**
+	 * Modifier la position d'un mobiles venant d'un autre client.
+	 * @param client
+	 * @param idPoisson
+	 * @param x
+	 * @param y
+	 */
 	public void OtherModifPositionSimple(long client, int idPoisson, int x, int y){
 		int index = parcourirOther (client,idPoisson);
 		if(index != -1){

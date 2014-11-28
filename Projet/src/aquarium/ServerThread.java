@@ -52,8 +52,7 @@ public class ServerThread extends Thread {
 					void firstContact(){
 						long id = Thread.currentThread().getId();
 						System.out.println(clients);
-						System.out.println("Le client n° " + id
-								+ " est connecté. ");
+						System.out.println("Le client n° " + id	+ " est connecté. ");
 
 						// premier contact
 
@@ -63,9 +62,7 @@ public class ServerThread extends Thread {
 						out = new PrintWriter(socket.getOutputStream());
 
 						// envoi d'un message
-						out.println(" vous êtes bien dans l'aquarium de "
-								+ socket.getLocalAddress() + " au numéro "
-								+ id);
+						out.println(" vous êtes bien dans l'aquarium de " + socket.getLocalAddress() + " au numéro " + id);
 						out.flush();
 
 						String tampon;
@@ -76,8 +73,7 @@ public class ServerThread extends Thread {
 
 						for (int i = 1; i <= nbr; i++) {
 							tampon = in.readLine();
-							aqua.addClasses(id, tampon,
-									"image/polochon.jpg");
+							aqua.addClasses(id, tampon,	"image/polochon.jpg");
 						}
 
 						// réception des poissons du client
