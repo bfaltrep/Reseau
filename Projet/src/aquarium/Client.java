@@ -64,7 +64,7 @@ public class Client extends Thread {
 			for(int j = 0;j<taille;j++){
 				AquariumItem ai = a.getAquariumItem(MobileItems.get(j));
 				String name = ((MobileItem) ai).getClasse();
-				out.println(Protocole1.encodeFishString(j,ai.getWidth(),ai.getHeight() ,ai.getPosition().x, ai.getPosition().y,name));
+				out.println(Protocole1.encodeNewFish(j,ai.getWidth(),ai.getHeight() ,ai.getPosition().x, ai.getPosition().y,name));
 				out.flush();
 			}
 			

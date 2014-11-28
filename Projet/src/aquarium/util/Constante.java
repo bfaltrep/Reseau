@@ -6,5 +6,6 @@ public enum Constante {
 	NEWFISH,
 	KILLFISH,
 	MOVEFISH,
-	NEWCLASS
+	NEWCLASS,
+	SIZE
 }

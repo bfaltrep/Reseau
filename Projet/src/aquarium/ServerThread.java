@@ -56,7 +56,6 @@ public class ServerThread extends Thread {
 
 						in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-
 						out = new PrintWriter(socket.getOutputStream());
 
 						// envoi d'un message
@@ -67,16 +66,23 @@ public class ServerThread extends Thread {
 
 						// réception des classes du client
 						tampon = in.readLine();
+						int i = Protocole1.decoder(tampon,id, aqua);
+						if(i>0){
+							for(int j = 0 ; j < i ; j++){
+								tampon = in.readLine();
+								int k = Protocole1.decoder(tampon,id, aqua);
+							}
+						}
+						/*tampon = in.readLine();
 						int nbr = Integer.parseInt(tampon);
-
 						for (int i = 1; i <= nbr; i++) {
 							tampon = in.readLine();
 							aqua.addClasses(id, tampon,	"image/polochon.jpg");
-						}
+						}*/
 
 						// réception des poissons du client
 						tampon = in.readLine();
-						nbr = Integer.parseInt(tampon);
+						int nbr = Integer.parseInt(tampon);
 						for (int i = 0; i < nbr; i++) {
 							tampon = in.readLine();
 							String[] contenu = tampon.split("!");

@@ -1,35 +1,33 @@
 package aquarium;
 
-import java.io.UnsupportedEncodingException;
 
 import aquarium.gui.Aquarium;
 import aquarium.items.Mobiles;
-import aquarium.util.Constante;
 
 public class Protocole1 {
 
-	public static boolean decoder(String s,long idClient, Aquarium a){
+	public static int decoder(String s,long idClient, Aquarium a){
 		String contenu [] = s.split("!");
-		String tmp = contenu[0];
+		String commande = contenu[0];
 		
-		switch (tmp){
+		switch (commande){
 		case "DECONNECT":
 			//message  : CMD
-			a.disconnectClient();
+			a.disconnectClient(idClient);
 			break;
 		case "ADDFISH":
 			//message  : CMD!idFish!width!height!x!y!StringClass
-			a.addFish(new Mobiles(idClient, 
+			a.addObj(new Mobiles(idClient, 
 					Integer.parseInt(contenu[0]),
 					Integer.parseInt(contenu[1]), 
 					Integer.parseInt(contenu[2]), 
 					Integer.parseInt(contenu[3]), 
 					Integer.parseInt(contenu[4]), 
-					a.getClasse(a.getClasseIndex(contenu[5])).getImages()));
+					a.getClass(a.getClasseIndex(contenu[5])).getImages()));
 			break;
 		case "REMOVEFISH":
 			//message  : CMD!idFish
-			a.removeFish(idClient,contenu[1]);
+			a.deleteSingleClientObj(idClient,Integer.parseInt(contenu[1]));
 			break;
 		case "MOVEFISH":
 			//message  : CMD!idFish!x!y
@@ -42,13 +40,16 @@ public class Protocole1 {
 			//message  : CMD!nomClasse
 			a.addClasses(idClient,contenu[1],"image/polochon.jpg");
 			break;
+		case "SIZE":
+			//message  : CMD!NB
+			return Integer.parseInt(contenu[1]);
+			
 		default: 
 			System.out.println("Reception d'un message non conforme. ");
 			System.out.println("non traité : "+s);
-			break;
+			return -1;
 		}
-	
-		return true;
+		return 0;
 	}
 	
 	public static String encodeDisconnect(){
