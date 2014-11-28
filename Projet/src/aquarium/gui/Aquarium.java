@@ -218,7 +218,7 @@ public class Aquarium extends JPanel {
 	 * @param image adresse de l'image
 	 */
 
-	public void addClasses(int idC, String nom, String image){
+	public void addClasses(long idC, String nom, String image){
 		classes.add(new ElementImage(idC,nom,image));
 	}
 	
@@ -247,7 +247,7 @@ public class Aquarium extends JPanel {
 	 * retourne le nombre de classes existantes pour ce client
 	 * 
 	 * **/
-	public int ClassesNbPourClient(int idClient){
+	public int ClassesNbPourClient(long idClient){
 		int nb = 0;
 		Iterator<ElementImage> it = classes.iterator(); 
 		while (it.hasNext()) {
@@ -263,7 +263,7 @@ public class Aquarium extends JPanel {
 	 * supprimer tous les poissons du client idC
 	 * @param idC
 	 */
-	public void ClassesSupprMultiple(int idC){
+	public void ClassesSupprMultiple(long idC){
 		Iterator<ElementImage> it = classes.iterator(); 
 		while (it.hasNext()) {
 			ElementImage tmp = it.next();
@@ -289,7 +289,7 @@ public class Aquarium extends JPanel {
 	 * @param idPoisson
 	 * @return
 	 */
-	public int parcourirOther (int client, int idPoisson){
+	public int parcourirOther (long client, int idPoisson){
 		for(int i = 0;i<others.size(); i++){
 			if(others.get(i).getIdClient() == client && others.get(i).getIdPoisson() == idPoisson){
 				return i;
@@ -298,21 +298,21 @@ public class Aquarium extends JPanel {
 		return -1;
 	}
 
-	public void OtherSupprSimple(int client, int idPoisson){
+	public void OtherSupprSimple(long client, int idPoisson){
 		int index = parcourirOther (client,idPoisson);
 		if(index != -1){
 			others.remove(index);
 		}
 	}
 	
-	public void OtherModifPositionSimple(int client, int idPoisson, int x, int y){
+	public void OtherModifPositionSimple(long client, int idPoisson, int x, int y){
 		int index = parcourirOther (client,idPoisson);
 		if(index != -1){
 			others.get(index).setPosition(new Point(x,y));;
 		}
 	}
 	
-	public void OtherSupprMultiple(int client){
+	public void OtherSupprMultiple(long client){
 		Iterator<Mobiles> it = others.iterator(); 
 		while (it.hasNext()) {
 			Mobiles tmp = it.next();

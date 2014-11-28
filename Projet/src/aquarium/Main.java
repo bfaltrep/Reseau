@@ -23,10 +23,8 @@ public class Main  {
 			ServerSocket serveur;
 			
 			try{
-				
-			serveur = new ServerSocket(Integer.parseInt(args[1]));
-			Thread t = new ServerThread(serveur);
-			t.start();
+				Thread t = new ServerThread(Integer.parseInt(args[1]));
+				t.start();
 			
 			}catch(IOException e){
 			e.printStackTrace();
