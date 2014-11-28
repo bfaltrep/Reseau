@@ -48,16 +48,19 @@ public class Aquarium extends JPanel {
 	 * "Stones items" to be displayed in the Aquarium
 	 */
 	private static final int NB_STONES = 6;
+	
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Seaweed items" to be displayed in the Aquarium
 	 */
 	private static final int NB_SEAWEED = 9;
+	
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
 	private static final int NB_FISH = 5;
+	
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
@@ -68,6 +71,7 @@ public class Aquarium extends JPanel {
 	 * Pixel data buffer for the Aquarium rendering
 	 */
 	private Image buffer = null;
+	
 	/**
 	 * Graphic component context derived from buffer Image
 	 */
@@ -80,35 +84,40 @@ public class Aquarium extends JPanel {
 
 	private List<ElementImage> classes = new ArrayList<ElementImage>();
 			
-	private List<Mobiles> others = new ArrayList<Mobiles>();
-	
-	
+	private List<Mobiles> others = new ArrayList<Mobiles>();	
 	
 	public Aquarium() {
 
-		classes.add(new ElementImage(0,StableFish.getImageClasse(),"StableFish"));
-		classes.add(new ElementImage(0,DorisFish.getImageClasse(),"DorisFish"));
+		classes.add(new ElementImage(0, StableFish.getImageClasse(), "StableFish"));
+		classes.add(new ElementImage(0, DorisFish.getImageClasse(), "DorisFish"));
 		
 		for (int i = 0; i < NB_STONES; i++) {
 			AquariumItem ai = new Seastone();
-			if (ai.sink(items))
+
+			if (ai.sink(items)) {
 				items.add(ai);
+			}
 		}
 		for (int i = 0; i < NB_SEAWEED; i++) {
 			AquariumItem ai = new Seaweed();
-			if (ai.sink(items))
+
+			if (ai.sink(items)) {
 				items.add(ai);
+			}
 		}
 		for (int i = 0; i < NB_FISH; i++) {
 			AquariumItem ai = new StableFish();
-			
-			if (ai.sink(items))
+
+			if (ai.sink(items)) {
 				items.add(ai);
+			}
 		}
 		for (int i = 0; i < NB_DORISFISH; i++) {
 			AquariumItem ai = new DorisFish();
-			if (ai.sink(items))
+
+			if (ai.sink(items)) {
 				items.add(ai);
+			}
 		}
 	}
 
@@ -131,7 +140,7 @@ public class Aquarium extends JPanel {
 	 * @param i, an integer between [0, number of items of the aquarium]
 	 * @return the AquariumItem at i position.
 	 */
-	public AquariumItem getAquariumItem(int i){
+	public AquariumItem getAquariumItem(int i) {
 		return items.get(i);
 	}
 	
@@ -140,11 +149,14 @@ public class Aquarium extends JPanel {
 	 * screen
 	 */
 	public void animate() {
-		for (AquariumItem item : items)
-			if (item instanceof MobileItem)
-				((MobileItem) item).move(items);
-		for(AquariumItem item : others)
-			((Mobiles) item).move();
+		for (AquariumItem item : items) {
+			if (item instanceof MobileItem) {
+				((MobileItem)item).move(items);
+			}
+		}
+		for (AquariumItem item : others) {
+			((Mobiles)item).move();
+		}
 		updateScreen();
 	}
 
@@ -170,10 +182,12 @@ public class Aquarium extends JPanel {
 
 		if (buffer == null) {
 			buffer = createImage(SIZE_AQUA_X, SIZE_AQUA_Y);
-			if (buffer == null)
+			if (buffer == null) {
 				throw new RuntimeException("Could not instanciate graphics");
-			else
+			}
+			else {
 				graphicContext = buffer.getGraphics();
+			}
 		}
 		graphicContext.setColor(backgroundColor);
 		graphicContext.fillRect(0, 0, SIZE_AQUA_X, SIZE_AQUA_Y);
@@ -186,70 +200,66 @@ public class Aquarium extends JPanel {
 		this.repaint();
 	}
 
-	
-	
-
-	
 	//methodes de gestion des listes
-	
 	/**
 	 * @return le nombre d'éléments mobiles dans l'aquarium qui sont créés par cet aquarium
 	 */
-	public List<Integer> getNBMobileItems(){
+	public List<Integer> getNbOfMobileItems() {
 		List<Integer> tmp = new ArrayList<Integer>();
-		for (int j = 0;j< items.size();j++){
+
+		for (int j = 0; j < items.size(); j++) {
 			AquariumItem item = items.get(j);
-			if (item instanceof MobileItem)
+			if (item instanceof MobileItem) {
 				tmp.add(j);
+			}
 		}
 		return tmp;
 	}
 	
-	
 	//gestion Classes
-	
 	/**
-	 * Ajouter une classe dans la liste des classes de cet aquarium
+	 * Ajouter une classe
 	 * @param idC identifiant du client
 	 * @param nom nom de la classe
 	 * @param image adresse de l'image
 	 */
-
-	public void addClasses(long idC, String nom, String image){
+	public void addClasses(long idC, String nom, String image) {
 		classes.add(new ElementImage(idC,nom,image));
 	}
 	
 	/**
-	 * retourne l'élément se trouvant à l'index i de la liste des éléments.
+	 * Retourne l'élément se trouvant à l'index i dans la liste des éléments
 	 * @param i
 	 * @return
 	 */
-	public ElementImage getClasse(int i){
+	public ElementImage getClass(int i) {
 		return classes.get(i);
 	}
 	
-	public int getClasseIndex(String s){
+	public int getClasseIndex(String s) {
 		int index = 0;
 		Iterator<ElementImage> it = classes.iterator(); 
+
 		while (it.hasNext()) {
 			ElementImage tmp = it.next();
-			if(tmp.getNom().matches(s)){
+			if (tmp.getNom().matches(s)) {
 				return index;
 			}
 		}
 		return -1;
-	}	
+	}
 	
 	/**
-	 * retourne le nombre de classes existantes pour ce client
-	 * 
-	 * **/
-	public int ClassesNbPourClient(long idClient){
+	 * Retourne le nombre de classes d'un client
+	 *@param idClient 
+	 */
+	public int nbOfClientClasses(long idClient) {
 		int nb = 0;
 		Iterator<ElementImage> it = classes.iterator(); 
+
 		while (it.hasNext()) {
 			ElementImage tmp = it.next();
-			if(tmp.getidClient() == idClient){
+			if (tmp.getidClient() == idClient) {
 				nb++;
 			}
 		}
@@ -257,38 +267,38 @@ public class Aquarium extends JPanel {
 	}
 	
 	/**
-	 * supprimer tous les poissons du client idC
-	 * @param idC
+	 * Supprime toutes les classes d'un client
+	 * @param idClient
 	 */
-	public void ClassesSupprMultiple(long idC){
-		Iterator<ElementImage> it = classes.iterator(); 
+	public void deleteMultipleClasses(long idClient) {
+		Iterator<ElementImage> it = classes.iterator();
+		
 		while (it.hasNext()) {
 			ElementImage tmp = it.next();
-			if(tmp.getidClient() == idC){
+			if (tmp.getidClient() == idClient) {
 				it.remove();
 			}
 		}	
 	}
 	
 	//gestion Others
-	
 	/**
-	 * ajouter un Mobiles dans others. Soit un poisson venant d'un autre client.
+	 * Ajoute un objet
 	 * @param m
 	 */
-	public void addOther(Mobiles m){
+	public void addObj(Mobiles m) {
 		others.add(m);
 	}
 	
 	/**
-	 * parcourir others et retourner la position du mobiles qui correspond aux id en paramètre
-	 * @param client
+	 * Parcoure la liste des objets d'un client et retourne la position de l'objet recherché
+	 * 	 * @param idClient
 	 * @param idPoisson
 	 * @return
 	 */
-	public int parcourirOther (long client, int idPoisson){
-		for(int i = 0;i<others.size(); i++){
-			if(others.get(i).getIdClient() == client && others.get(i).getIdPoisson() == idPoisson){
+	public int browseClientObj(long idClient, int idPoisson) {
+		for (int i = 0; i < others.size(); i++) {
+			if (others.get(i).getIdClient() == idClient && others.get(i).getIdPoisson() == idPoisson) {
 				return i;
 			}
 		}
@@ -296,39 +306,53 @@ public class Aquarium extends JPanel {
 	}
 
 	/**
-	 * Supprimer un objet mobiles venant d'un autre client.
-	 * @param client
+	 * Supprimer un objet mobiles venant d'un autre client
+	 * @param idClient
 	 * @param idPoisson
 	 */	
-	public void OtherSupprSimple(long client, int idPoisson){
-		int index = parcourirOther (client,idPoisson);
-		if(index != -1){
+	public void deleteSingleClientObj(long idClient, int idPoisson) {
+		int index = browseClientObj(idClient, idPoisson);
+		
+		if (index != -1) {
 			others.remove(index);
 		}
 	}
 	
 	/**
-	 * Modifier la position d'un mobiles venant d'un autre client.
-	 * @param client
+	 * Modifier la position d'un poisson venant d'un autre client
+	 * @param idClient
 	 * @param idPoisson
 	 * @param x
 	 * @param y
 	 */
-	public void OtherModifPositionSimple(long client, int idPoisson, int x, int y){
-		int index = parcourirOther (client,idPoisson);
-		if(index != -1){
-			others.get(index).setPosition(new Point(x,y));;
+	public void modifySingleClientObj(long idClient, int idPoisson, int x, int y) {
+		int index = browseClientObj(idClient, idPoisson);
+		
+		if (index != -1) {
+			others.get(index).setPosition(new Point(x,y));
 		}
 	}
 	
-	public void OtherSupprMultiple(long client){
-		Iterator<Mobiles> it = others.iterator(); 
+	/**
+	 * Supprime tout les objets appartenant à un client
+	 * @param idClient
+	 */
+	
+	public void deleteMultipleClientObj(long idClient) {
+		Iterator<Mobiles> it = others.iterator();
+		
 		while (it.hasNext()) {
 			Mobiles tmp = it.next();
-			if(tmp.getIdClient() == client){
+			if (tmp.getIdClient() == idClient) {
 				it.remove();
 			}
 		}	
 	}
 	
+	public void disconnectClient(long idClient) {
+		deleteMultipleClasses(idClient);
+		deleteMultipleClientObj(idClient);
+		
+		
+	}
 }
