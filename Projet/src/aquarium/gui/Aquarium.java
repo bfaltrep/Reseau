@@ -59,13 +59,13 @@ public class Aquarium extends JPanel {
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
-	private static final int NB_FISH = 5;
+	private static final int NB_FISH = 3;
 	
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
-	private static final int NB_DORISFISH = 5;
+	private static final int NB_DORISFISH = 3;
 
 	/**
 	 * Pixel data buffer for the Aquarium rendering
@@ -85,10 +85,10 @@ public class Aquarium extends JPanel {
 	
 	private List<ElementImage> classes = new ArrayList<ElementImage>();
 	
-	public Aquarium() {
+	public Aquarium(long idC) {
 
-		classes.add(new ElementImage(0, StableFish.getImageClasse(), "StableFish"));
-		classes.add(new ElementImage(0, DorisFish.getImageClasse(), "DorisFish"));
+		classes.add(new ElementImage(idC, StableFish.getImageClasse(), "StableFish"));
+		classes.add(new ElementImage(idC, DorisFish.getImageClasse(), "DorisFish"));
 		
 		for (int i = 0; i < NB_STONES; i++) {
 			AquariumItem ai = new Seastone();
@@ -199,6 +199,8 @@ public class Aquarium extends JPanel {
 		this.repaint();
 	}
 
+	
+	
 	//methodes de gestion des listes
 	/**
 	 * @return la liste des mobiles dans l'aquarium qui sont créés par cet aquarium
@@ -343,8 +345,6 @@ public class Aquarium extends JPanel {
 		}
 		return res;
 	}
-	
-	
 	
 	/**
 	 * Modifier la position d'un poisson venant d'un autre client

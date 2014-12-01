@@ -28,19 +28,20 @@ public class ServerThread extends Thread {
 
 	public ServerThread(int p) throws IOException {
 		socketserver = new ServerSocket(p);
-		aqua = new Aquarium();
+		aqua = new Aquarium(0);
 		clients = new ArrayList<Socket>();
 	}
 
 	public void run() {
-			AquariumWindow animation = new AquariumWindow(aqua);
-			animation.displayOnscreen();
-			try{
+
+		AquariumWindow animation = new AquariumWindow(aqua);
+		animation.displayOnscreen();
+		try{
 			final ScheduledExecutorService myservice = Executors.newScheduledThreadPool(10);
 			while (!socketserver.isClosed()) {
 				final Socket socket = socketserver.accept(); 
 				clients.add(socket);
-				
+
 				myservice.execute(new Runnable() {
 
 					void firstContact() throws Exception {
@@ -54,7 +55,7 @@ public class ServerThread extends Thread {
 						out = new PrintWriter(socket.getOutputStream());
 
 						// envoi d'un message
-						out.println(" vous êtes bien dans l'aquarium de " + socket.getLocalAddress() + " au numéro " + id);
+						out.println(id);
 						out.flush();
 
 						// réception des classes du client
@@ -62,14 +63,14 @@ public class ServerThread extends Thread {
 
 						// réception des poissons du client
 						Protocole1.receiveFishs(in, aqua, id,true);
-						
+
 						//envoi des classes
-						Protocole1.sendMyClasses(out, aqua);
-						
+						Protocole1.sendMyClasses(out, aqua,0);
+
 						//envoi des poissons
 						Protocole1.sendMyFishs(out, aqua);
-						
-						
+
+
 					}
 
 					@Override
@@ -84,9 +85,9 @@ public class ServerThread extends Thread {
 						myservice.scheduleWithFixedDelay(new Runnable() {
 
 							private void send() {
-								
-								
-								
+
+
+
 								//envoyer les modification de l'aquarium : position / ajout / suppression
 							}
 
@@ -144,7 +145,7 @@ public class ServerThread extends Thread {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			
+
 		}finally{
 		}
 	}

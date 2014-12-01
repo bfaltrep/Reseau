@@ -23,48 +23,49 @@ public class Client extends Thread {
 	private PrintWriter out;
 	//aquarium
 	private Aquarium a ;
-	
+	private long identifiant;
+
 	public Client(){
 		//vide car initialisation dans le run puisqu'on est dans le client => fait la demande
 	}
-	
+
 	public void run() {
 		try{
-			//création de l'aquarium
-			a = new Aquarium();
-			AquariumWindow animation = new AquariumWindow(a);
-			animation.displayOnscreen();
-			
+
 			//mise en contact
 			socket = new Socket (InetAddress.getLocalHost(),8888);
 			System.out.println("demande de connexion ");
 			out = new PrintWriter(socket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			
+
+
 			final ScheduledExecutorService myservice = Executors.newScheduledThreadPool(3);
 			myservice.execute(new Runnable() {
 
 				void firstContact() throws Exception {
-					
 					//MESSAGE DE BIENVENUE DANS L AQUARIUM
 					// réception > InputStream > ISReader > BufferedReader
 					String message = in.readLine();
-					System.out.println(message);
+					identifiant = Long.parseLong(message);
+					//création de l'aquarium
+					a = new Aquarium(identifiant);
+					AquariumWindow animation = new AquariumWindow(a);
+					animation.displayOnscreen();
 					
 					//envoi des classes
-					Protocole1.sendMyClasses(out, a);
-					
+					Protocole1.sendMyClasses(out, a,identifiant);
+
 					//envoi des poissons
 					Protocole1.sendMyFishs(out, a);
-					
+
 					//reception des classes des autres
 					Protocole1.receiveClasses(in,a, 0,false);
-					
+
 					//reception des poissons des autres
 					Protocole1.receiveFishs( in, a, 0,false);
-					
+
 				}
-				
+
 				@Override
 				public void run() {
 					try {
@@ -72,14 +73,14 @@ public class Client extends Thread {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				
+
 
 					// comportement dans le temps
 					myservice.scheduleWithFixedDelay(new Runnable() {
 
 						private void send() {
 							//envoyer les modification de l'aquarium : position / ajout / suppression
-							
+
 							//envoi des positions toutes les secondes
 							List<Integer> MobileItems =  a.getMobileItems();
 							int taille = MobileItems.size();
@@ -93,7 +94,7 @@ public class Client extends Thread {
 						}
 
 						private void receive() throws IOException{
-							
+
 						}
 
 						public void run() {
@@ -111,7 +112,7 @@ public class Client extends Thread {
 							send();
 						}
 					}, 0, 1, TimeUnit.SECONDS);
-				
+
 				}
 			});
 		}catch(UnknownHostException e){
