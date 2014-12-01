@@ -81,10 +81,9 @@ public class Aquarium extends JPanel {
 	 * List of Aquarium items to be rendered in the Aquarium
 	 */
 	private List<AquariumItem> items = new ArrayList<AquariumItem>();
-
-	private List<ElementImage> classes = new ArrayList<ElementImage>();
-			
 	private List<Mobiles> others = new ArrayList<Mobiles>();	
+	
+	private List<ElementImage> classes = new ArrayList<ElementImage>();
 	
 	public Aquarium() {
 
@@ -327,16 +326,19 @@ public class Aquarium extends JPanel {
 	 * Retourne la'identifiant et la postion de chaque Mobiles n'appartenant pas au client précisé
 	 * @return
 	 */
-	public List<Integer> positionsClientObj(int idClient){
-		List<List<Integer>> res = new ArrayList<List<Integer>>();
+	public List<List<Long>> positionsClientObj(long idClient){
+		List<List<Long>> res = new ArrayList<List<Long>>();
 		Iterator<Mobiles> it = others.iterator();
 		while (it.hasNext()) {
 			Mobiles tmp = it.next();
 			if (tmp.getIdClient() != idClient) {
 				Point p = tmp.getPosition();
-				res.add();
-				res.
-				
+				List<Long> element = new ArrayList<Long>();
+				element.add(tmp.getIdClient());
+				element.add(tmp.getIdPoisson());
+				element.add((long)p.x);
+				element.add((long)p.y);
+				res.add(element);
 			}
 		}
 		return res;

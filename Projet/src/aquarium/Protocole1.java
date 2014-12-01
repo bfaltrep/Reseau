@@ -19,7 +19,7 @@ public class Protocole1 {
 	 * @param a
 	 * @return
 	 */
-	public static int decoder(String s,long idClient, Aquarium a){
+	public static int decoder(String s,long idClient, Aquarium a, boolean server){
 		String contenu [] = s.split("!");
 		String commande = contenu[0];
 		
@@ -29,25 +29,46 @@ public class Protocole1 {
 			a.disconnectClient(idClient);
 			break;
 		case "ADDFISH":
-			//message  : CMD!idFish!width!height!x!y!StringClass
-			a.addObj(new Mobiles(idClient, 
+			if(server){
+			//message  : CMD!idClient!idFish!width!height!x!y!StringClass
+				a.addObj(new Mobiles(idClient, 
 					Integer.parseInt(contenu[0]),
-					Integer.parseInt(contenu[1]), 
 					Integer.parseInt(contenu[2]), 
 					Integer.parseInt(contenu[3]), 
 					Integer.parseInt(contenu[4]), 
-					a.getClass(a.getClasseIndex(contenu[5])).getImages()));
+					Integer.parseInt(contenu[5]), 
+					a.getClass(a.getClasseIndex(contenu[6])).getImages()));
+			}else{
+				a.addObj(new Mobiles(Long.parseLong(contenu[1]), 
+					Integer.parseInt(contenu[0]),
+					Integer.parseInt(contenu[2]), 
+					Integer.parseInt(contenu[3]), 
+					Integer.parseInt(contenu[4]), 
+					Integer.parseInt(contenu[5]), 
+					a.getClass(a.getClasseIndex(contenu[6])).getImages()));
+			}
 			break;
 		case "REMOVEFISH":
-			//message  : CMD!idFish
-			a.deleteSingleClientObj(idClient,Integer.parseInt(contenu[1]));
+			//message  : CMD!idClient!idFish
+			if(server){
+				a.deleteSingleClientObj(idClient,Integer.parseInt(contenu[1]));
+			}else{
+				a.deleteSingleClientObj(Long.parseLong(contenu[1]),Integer.parseInt(contenu[2]));
+			}
 			break;
 		case "MOVEFISH":
-			//message  : CMD!idFish!x!y
-			a.modifySingleClientObj(idClient,
-					Integer.parseInt(contenu[0]),
-					Integer.parseInt(contenu[1]),
-					Integer.parseInt(contenu[2]));
+			//message  : CMD!idClient!idFish!x!y
+			if(server){
+				a.modifySingleClientObj(idClient,
+					Integer.parseInt(contenu[2]),
+					Integer.parseInt(contenu[3]),
+					Integer.parseInt(contenu[4]));
+			}else{
+				a.modifySingleClientObj(Long.parseLong(contenu[1]),
+					Integer.parseInt(contenu[2]),
+					Integer.parseInt(contenu[3]),
+					Integer.parseInt(contenu[4]));
+			}
 			break;
 		case "NEWCLASS":
 			//message  : CMD!nomClasse
@@ -69,22 +90,28 @@ public class Protocole1 {
 		return "DECONNECT";
 	}
 	
-	public static String encodeNewFish(int idFish, int width, int height, int x, int y, String nameClass) {
-		return "ADDFISH"+"!"+idFish + "!" + width + "!" + height + "!" + x + "!" + y + "!" + nameClass;
+	public static String encodeNewFish(long idClient, int idFish, int width, int height, int x, int y, String nameClass) {
+		return "ADDFISH"+"!"+idClient+"!"+idFish + "!" + width + "!" + height + "!" + x + "!" + y + "!" + nameClass;
 	}
 	
-	public static String encodeKillFish(int idFish){
-		return "REMOVEFISH"+"!"+idFish;
+	public static String encodeKillFish(long idClient, long idFish){
+		return "REMOVEFISH"+"!"+idClient+"!"+idFish;
 	}
 	
-	public static String encodeMoveFish(int idFish, int x, int y){
-		return "MOVEFISH"+"!"+idFish+"!"+x+"!"+y;
+	public static String encodeMoveFish(long idClient, long idFish, int x, int y){
+		return "MOVEFISH"+"!"+idClient+"!"+idFish+"!"+x+"!"+y;
 	}
 
 	public static String encodeNewClass(String nomClass){
 		return "NEWCLASS"+"!"+nomClass;
 	}
 	
+	/**
+	 * envoyer les classes produites dans cet aquarium
+	 * @param out
+	 * @param aqua
+	 * @return
+	 */
 	public static boolean sendMyClasses(PrintWriter out, Aquarium aqua){
 		try{
 			int total = aqua.nbOfClientClasses(0);
@@ -101,6 +128,12 @@ public class Protocole1 {
 		return true;
 	}
 	
+	/**
+	 * Envoyer les poissons créés dans cet aquarium
+	 * @param out
+	 * @param aqua
+	 * @return
+	 */
 	public static boolean sendMyFishs(PrintWriter out, Aquarium aqua){
 		try{
 			List<Integer> MobileItems =  aqua.getMobileItems();
@@ -110,7 +143,7 @@ public class Protocole1 {
 			for(int j = 0;j<taille;j++){
 				AquariumItem ai = aqua.getAquariumItem(MobileItems.get(j));
 				String name = ((MobileItem) ai).getClasse();
-				out.println(encodeNewFish(j,ai.getWidth(),ai.getHeight() ,ai.getPosition().x, ai.getPosition().y,name));
+				out.println(encodeNewFish(0,j,ai.getWidth(),ai.getHeight() ,ai.getPosition().x, ai.getPosition().y,name));
 				out.flush();
 			}
 		}catch(Exception e){
@@ -120,15 +153,22 @@ public class Protocole1 {
 		return true;
 	}
 	
-	public static boolean receiveClasses(BufferedReader in,Aquarium aqua, long id){
+	/**
+	 * receptionner des classes et les intégrer à l'aquarium.
+	 * @param in
+	 * @param aqua
+	 * @param id
+	 * @return
+	 */
+	public static boolean receiveClasses(BufferedReader in,Aquarium aqua, long idClient, boolean server){
 		try{
 			String tampon;
 			tampon = in.readLine();
-			int i = decoder(tampon,id, aqua);
+			int i = decoder(tampon,idClient, aqua, server);
 			if(i>0){
 				for(int j = 0 ; j < i ; j++){
 					tampon = in.readLine();
-					int k = decoder(tampon,id, aqua);
+					int k = decoder(tampon,idClient, aqua,server);
 					if(k == -1){
 						throw new Exception();
 					}
@@ -141,13 +181,20 @@ public class Protocole1 {
 		return true;
 	}
 	
-	public static boolean receiveFishs(BufferedReader in, Aquarium aqua, long id){
+	/**
+	 * receptionner des mobiles et les intégrer à l'aquarium.
+	 * @param in
+	 * @param aqua
+	 * @param id
+	 * @return
+	 */
+	public static boolean receiveFishs(BufferedReader in, Aquarium aqua, long id, boolean server){
 		try{
 			String tampon = in.readLine();
-			int i = decoder(tampon,id,aqua);
+			int i = decoder(tampon,id,aqua,server);
 			for (int j = 0; j < i; j++) {
 				tampon = in.readLine();
-				int k = decoder(tampon,id, aqua);
+				int k = decoder(tampon,id, aqua,server);
 				if(k == -1){
 					throw new Exception();
 				}
@@ -166,10 +213,14 @@ public class Protocole1 {
 	 * @param id
 	 * @return
 	 */
-	public static boolean sendPositionsOthers(BufferedReader in, Aquarium a, long id){
+	public static boolean sendPositionsOthers(PrintWriter out, Aquarium a, long id){
 		try{
-			
-			
+			List<List<Long>> mobiles = a.positionsClientObj(id);
+			int taille = mobiles.size();
+			out.println(taille);
+			out.flush();
+			for(int i = 0 ;i < mobiles.size(); i++)
+				out.println(encodeMoveFish(mobiles.get(i).get(0),mobiles.get(i).get(1),(int)(long) mobiles.get(i).get(2),(int)(long) mobiles.get(i).get(3)));
 		}catch(Exception e){
 			e.printStackTrace();
 			return false;

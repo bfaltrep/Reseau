@@ -58,10 +58,10 @@ public class Client extends Thread {
 					Protocole1.sendMyFishs(out, a);
 					
 					//reception des classes des autres
-					Protocole1.receiveClasses(in,a, 0);
+					Protocole1.receiveClasses(in,a, 0,false);
 					
 					//reception des poissons des autres
-					Protocole1.receiveFishs( in, a, 0);
+					Protocole1.receiveFishs( in, a, 0,false);
 					
 				}
 				

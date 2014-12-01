@@ -58,11 +58,10 @@ public class ServerThread extends Thread {
 						out.flush();
 
 						// réception des classes du client
-						Protocole1.receiveClasses(in, aqua, id);
+						Protocole1.receiveClasses(in, aqua, id,true);
 
 						// réception des poissons du client
-						Protocole1.receiveFishs(in, aqua, id);
-						
+						Protocole1.receiveFishs(in, aqua, id,true);
 						
 						//envoi des classes
 						Protocole1.sendMyClasses(out, aqua);
