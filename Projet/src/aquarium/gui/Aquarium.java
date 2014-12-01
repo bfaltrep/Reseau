@@ -202,9 +202,9 @@ public class Aquarium extends JPanel {
 
 	//methodes de gestion des listes
 	/**
-	 * @return le nombre d'éléments mobiles dans l'aquarium qui sont créés par cet aquarium
+	 * @return la liste des mobiles dans l'aquarium qui sont créés par cet aquarium
 	 */
-	public List<Integer> getNbOfMobileItems() {
+	public List<Integer> getMobileItems() {
 		List<Integer> tmp = new ArrayList<Integer>();
 
 		for (int j = 0; j < items.size(); j++) {
@@ -236,6 +236,11 @@ public class Aquarium extends JPanel {
 		return classes.get(i);
 	}
 	
+	/**
+	 * Retourne l'index de la classe dans la liste.
+	 * @param s La classe a rechercher
+	 * @return -1 si elle n'existe pas. Sinon retourne l'index de la classe.
+	 */
 	public int getClasseIndex(String s) {
 		int index = 0;
 		Iterator<ElementImage> it = classes.iterator(); 
@@ -319,6 +324,27 @@ public class Aquarium extends JPanel {
 	}
 	
 	/**
+	 * Retourne la'identifiant et la postion de chaque Mobiles n'appartenant pas au client précisé
+	 * @return
+	 */
+	public List<Integer> positionsClientObj(int idClient){
+		List<List<Integer>> res = new ArrayList<List<Integer>>();
+		Iterator<Mobiles> it = others.iterator();
+		while (it.hasNext()) {
+			Mobiles tmp = it.next();
+			if (tmp.getIdClient() != idClient) {
+				Point p = tmp.getPosition();
+				res.add();
+				res.
+				
+			}
+		}
+		return res;
+	}
+	
+	
+	
+	/**
 	 * Modifier la position d'un poisson venant d'un autre client
 	 * @param idClient
 	 * @param idPoisson
@@ -337,7 +363,6 @@ public class Aquarium extends JPanel {
 	 * Supprime tout les objets appartenant à un client
 	 * @param idClient
 	 */
-	
 	public void deleteMultipleClientObj(long idClient) {
 		Iterator<Mobiles> it = others.iterator();
 		

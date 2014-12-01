@@ -1,11 +1,24 @@
 package aquarium;
 
 
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.util.List;
+
 import aquarium.gui.Aquarium;
+import aquarium.items.AquariumItem;
+import aquarium.items.MobileItem;
 import aquarium.items.Mobiles;
 
 public class Protocole1 {
 
+	/**
+	 * Decoder le contenu du string et l'appliquer sur l'aquarium
+	 * @param s
+	 * @param idClient
+	 * @param a
+	 * @return
+	 */
 	public static int decoder(String s,long idClient, Aquarium a){
 		String contenu [] = s.split("!");
 		String commande = contenu[0];
@@ -70,6 +83,98 @@ public class Protocole1 {
 
 	public static String encodeNewClass(String nomClass){
 		return "NEWCLASS"+"!"+nomClass;
+	}
+	
+	public static boolean sendMyClasses(PrintWriter out, Aquarium aqua){
+		try{
+			int total = aqua.nbOfClientClasses(0);
+			out.println(total);
+			out.flush();
+			for(int j = 0;j < total;j++){
+				out.println(encodeNewClass(aqua.getClass(j).getNom())); //envoi d'une classe, MODIF après gestion de l'image
+				out.flush();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean sendMyFishs(PrintWriter out, Aquarium aqua){
+		try{
+			List<Integer> MobileItems =  aqua.getMobileItems();
+			int taille = MobileItems.size();
+			out.println(taille);
+			out.flush();
+			for(int j = 0;j<taille;j++){
+				AquariumItem ai = aqua.getAquariumItem(MobileItems.get(j));
+				String name = ((MobileItem) ai).getClasse();
+				out.println(encodeNewFish(j,ai.getWidth(),ai.getHeight() ,ai.getPosition().x, ai.getPosition().y,name));
+				out.flush();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean receiveClasses(BufferedReader in,Aquarium aqua, long id){
+		try{
+			String tampon;
+			tampon = in.readLine();
+			int i = decoder(tampon,id, aqua);
+			if(i>0){
+				for(int j = 0 ; j < i ; j++){
+					tampon = in.readLine();
+					int k = decoder(tampon,id, aqua);
+					if(k == -1){
+						throw new Exception();
+					}
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean receiveFishs(BufferedReader in, Aquarium aqua, long id){
+		try{
+			String tampon = in.readLine();
+			int i = decoder(tampon,id,aqua);
+			for (int j = 0; j < i; j++) {
+				tampon = in.readLine();
+				int k = decoder(tampon,id, aqua);
+				if(k == -1){
+					throw new Exception();
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Envoyer les positions des mobiles extérieurs qui ne viennent pas de id
+	 * @param in
+	 * @param a
+	 * @param id
+	 * @return
+	 */
+	public static boolean sendPositionsOthers(BufferedReader in, Aquarium a, long id){
+		try{
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	return true;
 	}
 	
 /* traitement par byte[]

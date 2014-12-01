@@ -7,16 +7,13 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import aquarium.gui.Aquarium;
 import aquarium.gui.AquariumWindow;
-import aquarium.items.Mobiles;
 
 public class ServerThread extends Thread {
 	private Aquarium aqua;
@@ -36,10 +33,9 @@ public class ServerThread extends Thread {
 	}
 
 	public void run() {
-		try {
 			AquariumWindow animation = new AquariumWindow(aqua);
 			animation.displayOnscreen();
-
+			try{
 			final ScheduledExecutorService myservice = Executors.newScheduledThreadPool(10);
 			while (!socketserver.isClosed()) {
 				final Socket socket = socketserver.accept(); 
@@ -47,7 +43,7 @@ public class ServerThread extends Thread {
 				
 				myservice.execute(new Runnable() {
 
-					void firstContact() {
+					void firstContact() throws Exception {
 						long id = Thread.currentThread().getId();
 						System.out.println(clients);
 						System.out.println("Le client n° " + id	+ " est connecté. ");
@@ -55,65 +51,47 @@ public class ServerThread extends Thread {
 						// premier contact
 
 						in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
 						out = new PrintWriter(socket.getOutputStream());
 
 						// envoi d'un message
 						out.println(" vous êtes bien dans l'aquarium de " + socket.getLocalAddress() + " au numéro " + id);
 						out.flush();
 
-						String tampon;
-
 						// réception des classes du client
-						tampon = in.readLine();
-						int i = Protocole1.decoder(tampon,id, aqua);
-						if(i>0){
-							for(int j = 0 ; j < i ; j++){
-								tampon = in.readLine();
-								int k = Protocole1.decoder(tampon,id, aqua);
-							}
-						}
-						/*tampon = in.readLine();
-						int nbr = Integer.parseInt(tampon);
-						for (int i = 1; i <= nbr; i++) {
-							tampon = in.readLine();
-							aqua.addClasses(id, tampon,	"image/polochon.jpg");
-						}*/
+						Protocole1.receiveClasses(in, aqua, id);
 
 						// réception des poissons du client
-						tampon = in.readLine();
-						int nbr = Integer.parseInt(tampon);
-						for (int i = 0; i < nbr; i++) {
-							tampon = in.readLine();
-							String[] contenu = tampon.split("!");
-							// tmp gestion image/nom
-							aqua.addObj(new Mobiles(id, Integer
-									.parseInt(contenu[0]), Integer
-									.parseInt(contenu[1]), Integer
-									.parseInt(contenu[2]), Integer
-									.parseInt(contenu[3]), Integer
-									.parseInt(contenu[4]), aqua.getClass(
-											aqua.getClasseIndex(contenu[5]))
-											.getImages()));
-						}
-						// envoi des poissons des autres
+						Protocole1.receiveFishs(in, aqua, id);
+						
+						
+						//envoi des classes
+						Protocole1.sendMyClasses(out, aqua);
+						
+						//envoi des poissons
+						Protocole1.sendMyFishs(out, aqua);
+						
+						
 					}
 
 					@Override
 					public void run() {
-
-						long id = Thread.currentThread().getId();
-
-						firstContact();
+						try {
+							firstContact();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 
 						// comportement dans le temps
 						myservice.scheduleWithFixedDelay(new Runnable() {
 
 							private void send() {
+								
+								
+								
 								//envoyer les modification de l'aquarium : position / ajout / suppression
 							}
 
-							private void receive(){
+							private void receive() throws IOException{
 								long id = Thread.currentThread().getId();
 
 								String tampon;
@@ -133,12 +111,22 @@ public class ServerThread extends Thread {
 									// client s'est deconnecte
 									myservice.shutdown();
 									e.printStackTrace();
+									socket.close();
 								}
 							}
 
 							public void run() {
 								// réception des positions toutes les secondes
-								receive();
+								try {
+									receive();
+								} catch (IOException e) {
+									e.printStackTrace();
+									try {
+										socket.close();
+									} catch (IOException e1) {
+										e1.printStackTrace();
+									}
+								}
 								send();
 							}
 						}, 0, 1, TimeUnit.SECONDS);
@@ -157,7 +145,8 @@ public class ServerThread extends Thread {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			socket.close();
+			
+		}finally{
 		}
 	}
 }
