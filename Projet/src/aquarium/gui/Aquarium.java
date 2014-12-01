@@ -48,19 +48,19 @@ public class Aquarium extends JPanel {
 	 * "Stones items" to be displayed in the Aquarium
 	 */
 	private static final int NB_STONES = 6;
-	
+
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Seaweed items" to be displayed in the Aquarium
 	 */
 	private static final int NB_SEAWEED = 9;
-	
+
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
 	private static final int NB_FISH = 3;
-	
+
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
@@ -71,7 +71,7 @@ public class Aquarium extends JPanel {
 	 * Pixel data buffer for the Aquarium rendering
 	 */
 	private Image buffer = null;
-	
+
 	/**
 	 * Graphic component context derived from buffer Image
 	 */
@@ -82,14 +82,14 @@ public class Aquarium extends JPanel {
 	 */
 	private List<AquariumItem> items = new ArrayList<AquariumItem>();
 	private List<Mobiles> others = new ArrayList<Mobiles>();	
-	
+
 	private List<ElementImage> classes = new ArrayList<ElementImage>();
-	
+
 	public Aquarium(long idC) {
 
 		classes.add(new ElementImage(idC, StableFish.getImageClasse(), "StableFish"));
 		classes.add(new ElementImage(idC, DorisFish.getImageClasse(), "DorisFish"));
-		
+
 		for (int i = 0; i < NB_STONES; i++) {
 			AquariumItem ai = new Seastone();
 
@@ -133,7 +133,7 @@ public class Aquarium extends JPanel {
 	public static int getSizeY() {
 		return SIZE_AQUA_Y;
 	}
-	
+
 	/**
 	 * 
 	 * @param i, an integer between [0, number of items of the aquarium]
@@ -142,7 +142,7 @@ public class Aquarium extends JPanel {
 	public AquariumItem getAquariumItem(int i) {
 		return items.get(i);
 	}
-	
+
 	/**
 	 * Proceeds to the movement of any movable AquariumItem and updates the
 	 * screen
@@ -199,8 +199,8 @@ public class Aquarium extends JPanel {
 		this.repaint();
 	}
 
-	
-	
+
+
 	//methodes de gestion des listes
 	/**
 	 * @return la liste des mobiles dans l'aquarium qui sont créés par cet aquarium
@@ -216,7 +216,7 @@ public class Aquarium extends JPanel {
 		}
 		return tmp;
 	}
-	
+
 	//gestion Classes
 	/**
 	 * Ajouter une classe
@@ -227,7 +227,7 @@ public class Aquarium extends JPanel {
 	public void addClasses(long idC, String nom, String image) {
 		classes.add(new ElementImage(idC,nom,image));
 	}
-	
+
 	/**
 	 * Retourne l'élément se trouvant à l'index i dans la liste des éléments
 	 * @param i
@@ -236,25 +236,27 @@ public class Aquarium extends JPanel {
 	public ElementImage getClass(int i) {
 		return classes.get(i);
 	}
-	
+
 	/**
 	 * Retourne l'index de la classe dans la liste.
 	 * @param s La classe a rechercher
 	 * @return -1 si elle n'existe pas. Sinon retourne l'index de la classe.
 	 */
-	public int getClasseIndex(String s) {
+	public int getClasseIndex(String s, long idC) {
 		int index = 0;
 		Iterator<ElementImage> it = classes.iterator(); 
-
+		int i = 0;
 		while (it.hasNext()) {
 			ElementImage tmp = it.next();
-			if (tmp.getNom().matches(s)) {
+			if (tmp.getNom().matches(s) && tmp.getidClient() == idC) {
+				index = i;
 				return index;
 			}
+			i++;
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Retourne le nombre de classes d'un client
 	 *@param idClient 
@@ -271,14 +273,14 @@ public class Aquarium extends JPanel {
 		}
 		return nb;
 	}
-	
+
 	/**
 	 * Supprime toutes les classes d'un client
 	 * @param idClient
 	 */
 	public void deleteMultipleClasses(long idClient) {
 		Iterator<ElementImage> it = classes.iterator();
-		
+
 		while (it.hasNext()) {
 			ElementImage tmp = it.next();
 			if (tmp.getidClient() == idClient) {
@@ -286,7 +288,7 @@ public class Aquarium extends JPanel {
 			}
 		}	
 	}
-	
+
 	//gestion Others
 	/**
 	 * Ajoute un objet
@@ -295,7 +297,7 @@ public class Aquarium extends JPanel {
 	public void addObj(Mobiles m) {
 		others.add(m);
 	}
-	
+
 	/**
 	 * Parcoure la liste des objets d'un client et retourne la position de l'objet recherché
 	 * 	 * @param idClient
@@ -318,12 +320,12 @@ public class Aquarium extends JPanel {
 	 */	
 	public void deleteSingleClientObj(long idClient, int idPoisson) {
 		int index = browseClientObj(idClient, idPoisson);
-		
+
 		if (index != -1) {
 			others.remove(index);
 		}
 	}
-	
+
 	/**
 	 * Retourne la'identifiant et la postion de chaque Mobiles n'appartenant pas au client précisé
 	 * @return
@@ -345,7 +347,7 @@ public class Aquarium extends JPanel {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * Modifier la position d'un poisson venant d'un autre client
 	 * @param idClient
@@ -355,19 +357,20 @@ public class Aquarium extends JPanel {
 	 */
 	public void modifySingleClientObj(long idClient, int idPoisson, int x, int y) {
 		int index = browseClientObj(idClient, idPoisson);
-		
+
+		System.out.println("modifySingleClientObj "+index);
 		if (index != -1) {
 			others.get(index).setPosition(new Point(x,y));
 		}
 	}
-	
+
 	/**
 	 * Supprime tout les objets appartenant à un client
 	 * @param idClient
 	 */
 	public void deleteMultipleClientObj(long idClient) {
 		Iterator<Mobiles> it = others.iterator();
-		
+
 		while (it.hasNext()) {
 			Mobiles tmp = it.next();
 			if (tmp.getIdClient() == idClient) {
@@ -375,11 +378,50 @@ public class Aquarium extends JPanel {
 			}
 		}	
 	}
-	
+
 	public void disconnectClient(long idClient) {
 		deleteMultipleClasses(idClient);
 		deleteMultipleClientObj(idClient);
-		
-		
 	}
+
+	
+	
+	/*
+	public void afficherClass (){
+		Iterator<ElementImage> it = classes.iterator(); 
+		int i = 0;
+		while (it.hasNext()) {
+			ElementImage tmp = it.next();
+			System.out.println("element "+i+" : idclient "+tmp.getidClient()+" nom "+tmp.getNom()+" image "+tmp.getImages());
+			i++;
+		}}*/
+	/*
+	public void afficherMobiles (){
+		Iterator<Mobiles> it = others.iterator(); 
+		int i = 0;
+		while (it.hasNext()) {
+			Mobiles tmp = it.next();
+			System.out.println("element "+i+" : position "+tmp.getPosition().toString()+" nom "+tmp.+" image "+tmp.getImages());
+			i++;
+		}
+	}*/
+	
+	public List<List<Long>> positionsMyFishs(){
+		List<List<Long>> res = new ArrayList<List<Long>>();
+		int i=0;
+		Iterator<AquariumItem> it = items.iterator();
+		while (it.hasNext()) {
+			AquariumItem tmp = it.next();
+			if (tmp instanceof MobileItem) {
+				Point p = tmp.getPosition();
+				List<Long> element = new ArrayList<Long>();
+				element.add((long)i);
+				element.add((long)p.x);
+				element.add((long)p.y);
+				res.add(element);
+			}
+		}
+		return res;
+	}
+
 }

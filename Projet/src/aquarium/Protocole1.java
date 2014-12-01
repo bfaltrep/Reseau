@@ -37,15 +37,15 @@ public class Protocole1 {
 						Integer.parseInt(contenu[4]), 
 						Integer.parseInt(contenu[5]), 
 						Integer.parseInt(contenu[6]), 
-						a.getClass(a.getClasseIndex(contenu[7])).getImages()));
-			}else{
+						a.getClass(a.getClasseIndex(contenu[7], idClient)).getImages()));
+			}else{				
 				a.addObj(new Mobiles(Long.parseLong(contenu[1]), 
 						Integer.parseInt(contenu[2]),
 						Integer.parseInt(contenu[3]), 
 						Integer.parseInt(contenu[4]), 
 						Integer.parseInt(contenu[5]), 
 						Integer.parseInt(contenu[6]), 
-						a.getClass(a.getClasseIndex(contenu[7])).getImages()));
+						a.getClass(a.getClasseIndex(contenu[7],Long.parseLong(contenu[1]))).getImages()));
 			}
 			break;
 		case "REMOVEFISH":
@@ -72,7 +72,7 @@ public class Protocole1 {
 			break;
 		case "NEWCLASS":
 			//message  : CMD!nomClasse
-			a.addClasses(idClient,contenu[1],"image/polochon.png");
+			a.addClasses(idClient,"image/polochon.png",contenu[1]);
 			break;
 		case "SIZE":
 			//message  : CMD!NB
@@ -232,6 +232,50 @@ public class Protocole1 {
 		return true;
 	}
 
+	public static boolean sendMyPositions(PrintWriter out, Aquarium a, long id){
+		try{
+			List<List<Long>> mobiles = a.positionsMyFishs();
+			int taille = mobiles.size();
+			out.println(encodeSize(taille));
+			out.flush();
+			for(int i = 0 ;i < mobiles.size(); i++)
+				out.println(encodeMoveFish(id,mobiles.get(i).get(0),(int)(long) mobiles.get(i).get(1),(int)(long) mobiles.get(i).get(2)));
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean receivePositions(BufferedReader in, Aquarium aqua, long id, boolean server){
+		try{
+			String tampon = in.readLine();
+			int i = decoder(tampon,id,aqua,server);
+			for (int j = 0; j < i; j++) {
+				tampon = in.readLine();
+				int k = decoder(tampon,id, aqua,server);
+				if(k == -1){
+					throw new Exception();
+				}
+			}
+			if(!server){
+				tampon = in.readLine();
+				i = decoder(tampon,id,aqua,server);
+				for (int j = 0; j < i; j++) {
+					tampon = in.readLine();
+					int k = decoder(tampon,id, aqua,server);
+					if(k == -1){
+						throw new Exception();
+					}
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	} 
+	
 	/* traitement par byte[]
 	public static void decodeFishByte(byte input[])	throws UnsupportedEncodingException {
 		String rawInput = new String(input, "UTF-8");

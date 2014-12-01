@@ -85,7 +85,9 @@ public class ServerThread extends Thread {
 						myservice.scheduleWithFixedDelay(new Runnable() {
 
 							private void send() {
-
+								long id = Thread.currentThread().getId();
+								Protocole1.sendMyPositions(out,  aqua, id);
+								Protocole1.sendPositionsOthers( out, aqua, id);
 
 
 								//envoyer les modification de l'aquarium : position / ajout / suppression
@@ -94,20 +96,13 @@ public class ServerThread extends Thread {
 							private void receive() throws IOException{
 								long id = Thread.currentThread().getId();
 
-								String tampon;
 								try {
-									tampon = in.readLine();
-									int nbr = Integer.parseInt(tampon);
-									for (int j = 0; j < nbr; j++) {
-										tampon = in.readLine();
-										String[] contenu = tampon.split("!");
-										aqua.modifySingleClientObj(id,
-												Integer.parseInt(contenu[0]),
-												Integer.parseInt(contenu[1]),
-												Integer.parseInt(contenu[2]));
-										// out.println(j+"!"+ai.getPosition().x+"!"+ai.getPosition().y);
-									}
-								} catch (IOException e) {
+									
+									Protocole1.receivePositions(in, aqua, id,true);
+									
+									//recevoir ajout suppression
+									
+								} catch (Exception e) {
 									// client s'est deconnecte
 									myservice.shutdown();
 									e.printStackTrace();
@@ -119,6 +114,7 @@ public class ServerThread extends Thread {
 								// réception des positions toutes les secondes
 								try {
 									receive();
+									send();
 								} catch (IOException e) {
 									e.printStackTrace();
 									try {
@@ -129,7 +125,7 @@ public class ServerThread extends Thread {
 								}
 								send();
 							}
-						}, 0, 1, TimeUnit.SECONDS);
+						}, 0, 10, TimeUnit.MILLISECONDS);
 
 						// tant qu'il n'a pas le message qui indique que le
 						// client se déconnecte.

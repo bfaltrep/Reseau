@@ -19,13 +19,15 @@ import aquarium.items.AquariumItem;
 public class Client extends Thread {
 	//reseau - communication
 	private Socket socket;
+	private int port;
 	private BufferedReader in;
 	private PrintWriter out;
 	//aquarium
 	private Aquarium a ;
 	private long identifiant;
 
-	public Client(){
+	public Client(int p){
+		port = p;
 		//vide car initialisation dans le run puisqu'on est dans le client => fait la demande
 	}
 
@@ -33,7 +35,7 @@ public class Client extends Thread {
 		try{
 
 			//mise en contact
-			socket = new Socket (InetAddress.getLocalHost(),8888);
+			socket = new Socket (InetAddress.getLocalHost(),port);
 			System.out.println("demande de connexion ");
 			out = new PrintWriter(socket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -47,6 +49,7 @@ public class Client extends Thread {
 					// réception > InputStream > ISReader > BufferedReader
 					String message = in.readLine();
 					identifiant = Long.parseLong(message);
+					
 					//création de l'aquarium
 					a = new Aquarium(identifiant);
 					AquariumWindow animation = new AquariumWindow(a);
@@ -60,16 +63,17 @@ public class Client extends Thread {
 
 					//reception des classes des autres
 					Protocole1.receiveClasses(in,a, 0,false);
-
+					
 					//reception des poissons des autres
 					Protocole1.receiveFishs( in, a, 0,false);
 
 				}
-
+				
 				@Override
 				public void run() {
 					try {
 						firstContact();
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -79,22 +83,21 @@ public class Client extends Thread {
 					myservice.scheduleWithFixedDelay(new Runnable() {
 
 						private void send() {
-							//envoyer les modification de l'aquarium : position / ajout / suppression
-
-							//envoi des positions toutes les secondes
-							List<Integer> MobileItems =  a.getMobileItems();
-							int taille = MobileItems.size();
-							out.println(taille);
-							out.flush();
-							for(int j = 0;j<taille;j++){
-								AquariumItem ai = a.getAquariumItem(MobileItems.get(j));
-								out.println(j+"!"+ai.getPosition().x+"!"+ai.getPosition().y);
-								out.flush();
-							}
+							//envoyer positions
+							Protocole1.sendMyPositions(out,a,identifiant);
+							
+							
+							
+							//envoyer  ajout / suppression
+							
 						}
 
 						private void receive() throws IOException{
-
+							//recevoir positions
+							
+							Protocole1.receivePositions( in, a, identifiant, false);
+							//recevoir ajout / suppression
+							
 						}
 
 						public void run() {
@@ -111,7 +114,7 @@ public class Client extends Thread {
 							}
 							send();
 						}
-					}, 0, 1, TimeUnit.SECONDS);
+					}, 0, 10, TimeUnit.MILLISECONDS);
 
 				}
 			});
