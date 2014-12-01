@@ -72,7 +72,7 @@ public class Protocole1 {
 			break;
 		case "NEWCLASS":
 			//message  : CMD!nomClasse
-			a.addClasses(idClient,contenu[1],"image/polochon.jpg");
+			a.addClasses(idClient,contenu[1],"image/polochon.png");
 			break;
 		case "SIZE":
 			//message  : CMD!NB
