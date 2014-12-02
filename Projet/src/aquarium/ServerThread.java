@@ -47,7 +47,7 @@ public class ServerThread extends Thread {
 					void firstContact() throws Exception {
 						long id = Thread.currentThread().getId();
 						System.out.println(clients);
-						System.out.println("Le client n° " + id	+ " est connecté. ");
+						System.out.println("Le client n° " + id	+ " est connecté.");
 
 						// premier contact
 
@@ -69,7 +69,7 @@ public class ServerThread extends Thread {
 
 						//envoi des poissons
 						Protocole1.sendMyFishs(out, aqua);
-
+						Protocole1.sendOthersFishes(out, aqua, id);
 
 					}
 
@@ -101,9 +101,9 @@ public class ServerThread extends Thread {
 									
 								} catch (Exception e) {
 									// client s'est deconnecte
+									socket.close();
 									myservice.shutdown();
 									e.printStackTrace();
-									socket.close();
 								}
 							}
 
@@ -123,7 +123,7 @@ public class ServerThread extends Thread {
 								}
 								send();
 							}
-						}, 0, 10, TimeUnit.MILLISECONDS);
+						}, 0, 100, TimeUnit.MILLISECONDS);
 
 						// tant qu'il n'a pas le message qui indique que le
 						// client se déconnecte.

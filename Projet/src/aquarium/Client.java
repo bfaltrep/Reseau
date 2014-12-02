@@ -24,15 +24,18 @@ public class Client extends Thread {
 	private Aquarium a ;
 	private long identifiant;
 
+	/**
+	 * constructeur
+	 * @param p port auquel on connecte notre client
+	 */
 	public Client(int p){
 		port = p;
-		//vide car initialisation dans le run puisqu'on est dans le client => fait la demande
 	}
 
 	public void run() {
 		try{
 
-			//mise en contact
+			//mise en contact avec le serveur
 			socket = new Socket (InetAddress.getLocalHost(),port);
 			System.out.println("demande de connexion ");
 			out = new PrintWriter(socket.getOutputStream());
@@ -84,8 +87,6 @@ public class Client extends Thread {
 							//envoyer positions
 							Protocole1.sendMyPositions(out,a,identifiant);
 							
-							
-							
 							//envoyer  ajout / suppression
 							
 						}
@@ -115,7 +116,7 @@ public class Client extends Thread {
 							}
 							send();
 						}
-					}, 0, 10, TimeUnit.MILLISECONDS);
+					}, 0, 100, TimeUnit.MILLISECONDS);
 
 				}
 			});

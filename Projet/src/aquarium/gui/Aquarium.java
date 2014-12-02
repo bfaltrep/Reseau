@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import aquarium.ElementImage;
+import aquarium.ClassesMobiles;
 import aquarium.items.AquariumItem;
 import aquarium.items.DorisFish;
 import aquarium.items.Mobiles;
@@ -77,18 +77,27 @@ public class Aquarium extends JPanel {
 	 */
 	private Graphics graphicContext = null;
 
+	//gestion de la concurrence
+	private Object oitems;
+	private Object oothers;
+	private Object oclasses;
+	
 	/**
 	 * List of Aquarium items to be rendered in the Aquarium
 	 */
 	private List<AquariumItem> items = new ArrayList<AquariumItem>();
 	private List<Mobiles> others = new ArrayList<Mobiles>();	
 
-	private List<ElementImage> classes = new ArrayList<ElementImage>();
+	private List<ClassesMobiles> classes = new ArrayList<ClassesMobiles>();
 
 	public Aquarium(long idC) {
-
-		classes.add(new ElementImage(idC, StableFish.getImageClasse(), "StableFish"));
-		classes.add(new ElementImage(idC, DorisFish.getImageClasse(), "DorisFish"));
+		oitems = new Object();
+		oothers = new Object();
+		oclasses = new Object();
+		
+		
+		classes.add(new ClassesMobiles(idC, StableFish.getImageClasse(), "StableFish"));
+		classes.add(new ClassesMobiles(idC, DorisFish.getImageClasse(), "DorisFish"));
 
 		for (int i = 0; i < NB_STONES; i++) {
 			AquariumItem ai = new Seastone();
@@ -140,7 +149,9 @@ public class Aquarium extends JPanel {
 	 * @return the AquariumItem at i position.
 	 */
 	public AquariumItem getAquariumItem(int i) {
-		return items.get(i);
+		synchronized(oitems){
+			return items.get(i);
+		}
 	}
 
 	/**
@@ -148,13 +159,15 @@ public class Aquarium extends JPanel {
 	 * screen
 	 */
 	public void animate() {
-		for (AquariumItem item : items) {
-			if (item instanceof MobileItem) {
-				((MobileItem)item).move(items);
+		synchronized(oitems){
+			for (AquariumItem item : items) {
+				if (item instanceof MobileItem)
+					((MobileItem)item).move(items);
 			}
 		}
-		for (AquariumItem item : others) {
-			((Mobiles)item).move();
+		synchronized(oothers){
+			for (AquariumItem item : others) 
+				((Mobiles)item).move();
 		}
 		updateScreen();
 	}
@@ -190,29 +203,31 @@ public class Aquarium extends JPanel {
 		}
 		graphicContext.setColor(backgroundColor);
 		graphicContext.fillRect(0, 0, SIZE_AQUA_X, SIZE_AQUA_Y);
-		for (AquariumItem aquariumItem : items) {
-			aquariumItem.draw(graphicContext);
+		synchronized(oitems){
+			for (AquariumItem aquariumItem : items)
+				aquariumItem.draw(graphicContext);
 		}
-		for (AquariumItem aquariumItem : others) {
-			aquariumItem.draw(graphicContext);
+		synchronized(oothers){
+			for (AquariumItem aquariumItem : others)
+				aquariumItem.draw(graphicContext);
 		}
 		this.repaint();
 	}
 
-
-
 	//methodes de gestion des listes
+	
 	//gestion de items
 	/**
 	 * @return la liste des mobiles dans l'aquarium qui sont créés par cet aquarium
 	 */
-	public List<Integer> getMobileItems() {
-		List<Integer> tmp = new ArrayList<Integer>();
-
-		for (int j = 0; j < items.size(); j++) {
-			AquariumItem item = items.get(j);
-			if (item instanceof MobileItem) {
-				tmp.add(j);
+	public List<AquariumItem> getMobileItems() {
+		List<AquariumItem> tmp = new ArrayList<AquariumItem>();
+		synchronized(oitems){
+			for (int j = 0; j < items.size(); j++) {
+				AquariumItem item = items.get(j);
+				if (item instanceof MobileItem) {
+					tmp.add(item);
+				}
 			}
 		}
 		return tmp;
@@ -226,16 +241,18 @@ public class Aquarium extends JPanel {
 	public List<List<Long>> positionsMyFishs(){
 		List<List<Long>> res = new ArrayList<List<Long>>();
 		int i=0;
-		Iterator<AquariumItem> it = items.iterator();
-		while (it.hasNext()) {
-			AquariumItem tmp = it.next();
-			if (tmp instanceof MobileItem) {
-				Point p = tmp.getPosition();
-				List<Long> element = new ArrayList<Long>();
-				element.add((long)i);
-				element.add((long)p.x);
-				element.add((long)p.y);
-				res.add(element);
+		synchronized(oitems){
+			Iterator<AquariumItem> it = items.iterator();
+			while (it.hasNext()) {
+				AquariumItem tmp = it.next();
+				if (tmp instanceof MobileItem) {
+					Point p = tmp.getPosition();
+					List<Long> element = new ArrayList<Long>();
+					element.add((long)i);
+					element.add((long)p.x);
+					element.add((long)p.y);
+					res.add(element);
+				}
 			}
 		}
 		return res;
@@ -249,7 +266,9 @@ public class Aquarium extends JPanel {
 	 * @param image adresse de l'image
 	 */
 	public void addClasses(long idC, String nom, String image) {
-		classes.add(new ElementImage(idC,nom,image));
+		synchronized(oclasses){
+			classes.add(new ClassesMobiles(idC,nom,image));
+		}
 	}
 
 	/**
@@ -257,8 +276,10 @@ public class Aquarium extends JPanel {
 	 * @param i
 	 * @return
 	 */
-	public ElementImage getClass(int i) {
-		return classes.get(i);
+	public ClassesMobiles getClass(int i) {
+		synchronized(oclasses){
+			return classes.get(i);
+		}
 	}
 
 	/**
@@ -268,15 +289,17 @@ public class Aquarium extends JPanel {
 	 */
 	public int getClasseIndex(String s, long idC) {
 		int index = 0;
-		Iterator<ElementImage> it = classes.iterator(); 
-		int i = 0;
-		while (it.hasNext()) {
-			ElementImage tmp = it.next();
-			if (tmp.getNom().matches(s) && tmp.getidClient() == idC) {
-				index = i;
-				return index;
+		synchronized(oclasses){
+			Iterator<ClassesMobiles> it = classes.iterator(); 
+			int i = 0;
+			while (it.hasNext()) {
+				ClassesMobiles tmp = it.next();
+				if (tmp.getNom().matches(s) && tmp.getidClient() == idC) {
+					index = i;
+					return index;
+				}
+				i++;
 			}
-			i++;
 		}
 		return -1;
 	}
@@ -287,12 +310,13 @@ public class Aquarium extends JPanel {
 	 */
 	public int nbOfClientClasses(long idClient) {
 		int nb = 0;
-		Iterator<ElementImage> it = classes.iterator(); 
-
-		while (it.hasNext()) {
-			ElementImage tmp = it.next();
-			if (tmp.getidClient() == idClient) {
-				nb++;
+		synchronized (oclasses){
+			Iterator<ClassesMobiles> it = classes.iterator(); 
+			while (it.hasNext()) {
+				ClassesMobiles tmp = it.next();
+				if (tmp.getidClient() == idClient) {
+					nb++;
+				}
 			}
 		}
 		return nb;
@@ -303,14 +327,15 @@ public class Aquarium extends JPanel {
 	 * @param idClient
 	 */
 	public void deleteMultipleClasses(long idClient) {
-		Iterator<ElementImage> it = classes.iterator();
-
-		while (it.hasNext()) {
-			ElementImage tmp = it.next();
-			if (tmp.getidClient() == idClient) {
-				it.remove();
+		synchronized(oclasses){
+			Iterator<ClassesMobiles> it = classes.iterator();
+			while (it.hasNext()) {
+				ClassesMobiles tmp = it.next();
+				if (tmp.getidClient() == idClient) {
+					it.remove();
+				}
 			}
-		}	
+		}
 	}
 
 	//gestion Others
@@ -319,7 +344,9 @@ public class Aquarium extends JPanel {
 	 * @param m
 	 */
 	public void addObj(Mobiles m) {
-		others.add(m);
+		synchronized(oothers){
+			others.add(m);
+		}
 	}
 
 	/**
@@ -329,9 +356,11 @@ public class Aquarium extends JPanel {
 	 * @return
 	 */
 	public int browseClientObj(long idClient, int idPoisson) {
-		for (int i = 0; i < others.size(); i++) {
-			if (others.get(i).getIdClient() == idClient && others.get(i).getIdPoisson() == idPoisson) {
-				return i;
+		synchronized(oothers){
+			for (int i = 0; i < others.size(); i++) {
+				if (others.get(i).getIdClient() == idClient && others.get(i).getIdPoisson() == idPoisson) {
+					return i;
+				}
 			}
 		}
 		return -1;
@@ -344,9 +373,10 @@ public class Aquarium extends JPanel {
 	 */	
 	public void deleteSingleClientObj(long idClient, int idPoisson) {
 		int index = browseClientObj(idClient, idPoisson);
-
 		if (index != -1) {
-			others.remove(index);
+			synchronized(oothers){
+				others.remove(index);
+			}
 		}
 	}
 
@@ -356,18 +386,20 @@ public class Aquarium extends JPanel {
 	 */
 	public List<List<Long>> positionsClientObj(long idClient){
 		List<List<Long>> res = new ArrayList<List<Long>>();
-		Iterator<Mobiles> it = others.iterator();
-		while (it.hasNext()) {
-			Mobiles tmp = it.next();
-			if (tmp.getIdClient() != idClient) {
-				Point p = tmp.getPosition();
-				List<Long> element = new ArrayList<Long>();
-				element.add(tmp.getIdClient());
-				element.add(tmp.getIdPoisson());
-				element.add((long)p.x);
-				element.add((long)p.y);
-				res.add(element);
-			}
+		synchronized(oothers){
+			Iterator<Mobiles> it = others.iterator();
+			while (it.hasNext()) {
+				Mobiles tmp = it.next();
+				if (tmp.getIdClient() != idClient) {
+					Point p = tmp.getPosition();
+					List<Long> element = new ArrayList<Long>();
+					element.add(tmp.getIdClient());
+					element.add(tmp.getIdPoisson());
+					element.add((long)p.x);
+					element.add((long)p.y);
+					res.add(element);
+				}
+			}	
 		}
 		return res;
 	}
@@ -382,9 +414,10 @@ public class Aquarium extends JPanel {
 	public void modifySingleClientObj(long idClient, int idPoisson, int x, int y) {
 		int index = browseClientObj(idClient, idPoisson);
 
-		System.out.println("modifySingleClientObj "+index);
 		if (index != -1) {
-			others.get(index).setPosition(new Point(x,y));
+			synchronized(oothers){
+				others.get(index).setPosition(new Point(x,y));
+			}
 		}
 	}
 
@@ -393,14 +426,15 @@ public class Aquarium extends JPanel {
 	 * @param idClient
 	 */
 	public void deleteMultipleClientObj(long idClient) {
-		Iterator<Mobiles> it = others.iterator();
-
-		while (it.hasNext()) {
-			Mobiles tmp = it.next();
-			if (tmp.getIdClient() == idClient) {
-				it.remove();
-			}
-		}	
+		synchronized(oothers){
+			Iterator<Mobiles> it = others.iterator();
+			while (it.hasNext()) {
+				Mobiles tmp = it.next();
+				if (tmp.getIdClient() == idClient) {
+					it.remove();
+				}
+			}	
+		}
 	}
 
 	public void disconnectClient(long idClient) {
@@ -410,11 +444,13 @@ public class Aquarium extends JPanel {
 
 	public List<Mobiles> getMobilesOthersExceptOne(long idClient){
 		List<Mobiles> res = new ArrayList<Mobiles>();
-		Iterator<Mobiles> it = others.iterator();
-		while (it.hasNext()) {
-			Mobiles tmp = it.next();
-			if(tmp.getIdClient() != idClient){
-				res.add(tmp);
+		synchronized(oothers){
+			Iterator<Mobiles> it = others.iterator();
+			while (it.hasNext()) {
+				Mobiles tmp = it.next();
+				if(tmp.getIdClient() != idClient){
+					res.add(tmp);
+				}
 			}
 		}
 		return res;
