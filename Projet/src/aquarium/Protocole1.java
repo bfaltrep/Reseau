@@ -21,6 +21,8 @@ public class Protocole1 {
 	 */
 	public static int decoder(String s,long idClient, Aquarium a, boolean server){
 		
+		String  messageEntier[] = s.split("#"); 
+		
 		String contenu [] = s.split("!");
 		String commande = contenu[0];
 

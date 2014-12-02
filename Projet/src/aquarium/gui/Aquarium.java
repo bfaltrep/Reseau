@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import aquarium.ClassesMobiles;
 import aquarium.items.AquariumItem;
 import aquarium.items.DorisFish;
 import aquarium.items.Mobiles;
@@ -18,6 +17,7 @@ import aquarium.items.StableFish;
 import aquarium.items.MobileItem;
 import aquarium.items.Seastone;
 import aquarium.items.Seaweed;
+import aquarium.util.ClassesMobiles;
 
 /**
  * An Aquarium is a Java graphical container that extends the JPanel class in
@@ -114,14 +114,14 @@ public class Aquarium extends JPanel {
 			}
 		}
 		for (int i = 0; i < NB_FISH; i++) {
-			AquariumItem ai = new StableFish();
+			AquariumItem ai = new StableFish(items.size()-1);
 
 			if (ai.sink(items)) {
 				items.add(ai);
 			}
 		}
 		for (int i = 0; i < NB_DORISFISH; i++) {
-			AquariumItem ai = new DorisFish();
+			AquariumItem ai = new DorisFish(items.size()-1);
 
 			if (ai.sink(items)) {
 				items.add(ai);
