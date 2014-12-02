@@ -89,17 +89,14 @@ public class ServerThread extends Thread {
 								Protocole1.sendMyPositions(out,  aqua, id);
 								Protocole1.sendPositionsOthers( out, aqua, id);
 
-
 								//envoyer les modification de l'aquarium : position / ajout / suppression
 							}
 
 							private void receive() throws IOException{
 								long id = Thread.currentThread().getId();
 
-								try {
-									
+								try {									
 									Protocole1.receivePositions(in, aqua, id,true);
-									
 									//recevoir ajout suppression
 									
 								} catch (Exception e) {
@@ -113,6 +110,7 @@ public class ServerThread extends Thread {
 							public void run() {
 								// réception des positions toutes les secondes
 								try {
+									System.out.println("run boucle serveur "+Thread.currentThread().getId());
 									receive();
 									send();
 								} catch (IOException e) {

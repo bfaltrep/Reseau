@@ -202,6 +202,7 @@ public class Aquarium extends JPanel {
 
 
 	//methodes de gestion des listes
+	//gestion de items
 	/**
 	 * @return la liste des mobiles dans l'aquarium qui sont créés par cet aquarium
 	 */
@@ -217,6 +218,29 @@ public class Aquarium extends JPanel {
 		return tmp;
 	}
 
+	
+	/**
+	 * Retourne une liste des identifiants/positions des instances mobiles créées dans cet aquarium
+	 * @return
+	 */
+	public List<List<Long>> positionsMyFishs(){
+		List<List<Long>> res = new ArrayList<List<Long>>();
+		int i=0;
+		Iterator<AquariumItem> it = items.iterator();
+		while (it.hasNext()) {
+			AquariumItem tmp = it.next();
+			if (tmp instanceof MobileItem) {
+				Point p = tmp.getPosition();
+				List<Long> element = new ArrayList<Long>();
+				element.add((long)i);
+				element.add((long)p.x);
+				element.add((long)p.y);
+				res.add(element);
+			}
+		}
+		return res;
+	}
+	
 	//gestion Classes
 	/**
 	 * Ajouter une classe
@@ -327,7 +351,7 @@ public class Aquarium extends JPanel {
 	}
 
 	/**
-	 * Retourne la'identifiant et la postion de chaque Mobiles n'appartenant pas au client précisé
+	 * Retourne l'identifiant et la position de chaque Mobiles n'appartenant pas au client précisé
 	 * @return
 	 */
 	public List<List<Long>> positionsClientObj(long idClient){
@@ -384,7 +408,17 @@ public class Aquarium extends JPanel {
 		deleteMultipleClientObj(idClient);
 	}
 
-	
+	public List<Mobiles> getMobilesOthersExceptOne(long idClient){
+		List<Mobiles> res = new ArrayList<Mobiles>();
+		Iterator<Mobiles> it = others.iterator();
+		while (it.hasNext()) {
+			Mobiles tmp = it.next();
+			if(tmp.getIdClient() != idClient){
+				res.add(tmp);
+			}
+		}
+		return res;
+	}
 	
 	/*
 	public void afficherClass (){
@@ -405,23 +439,4 @@ public class Aquarium extends JPanel {
 			i++;
 		}
 	}*/
-	
-	public List<List<Long>> positionsMyFishs(){
-		List<List<Long>> res = new ArrayList<List<Long>>();
-		int i=0;
-		Iterator<AquariumItem> it = items.iterator();
-		while (it.hasNext()) {
-			AquariumItem tmp = it.next();
-			if (tmp instanceof MobileItem) {
-				Point p = tmp.getPosition();
-				List<Long> element = new ArrayList<Long>();
-				element.add((long)i);
-				element.add((long)p.x);
-				element.add((long)p.y);
-				res.add(element);
-			}
-		}
-		return res;
-	}
-
 }

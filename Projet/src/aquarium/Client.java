@@ -7,14 +7,12 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import aquarium.gui.Aquarium;
 import aquarium.gui.AquariumWindow;
-import aquarium.items.AquariumItem;
 
 public class Client extends Thread {
 	//reseau - communication
@@ -103,7 +101,10 @@ public class Client extends Thread {
 						public void run() {
 							// réception des positions toutes les secondes
 							try {
+								System.out.println("run boucle client "+Thread.currentThread().getId());
+								send();
 								receive();
+								
 							} catch (IOException e) {
 								e.printStackTrace();
 								try {
