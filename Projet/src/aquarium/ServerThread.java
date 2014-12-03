@@ -46,7 +46,8 @@ public class ServerThread extends Thread {
 			while (!socketserver.isClosed()) {
 				final Socket socket = socketserver.accept(); 
 				clients.put(valeur,socket);
-
+				valeur++;
+				
 				myservice.execute(new Runnable() {
 
 					void firstContact() throws Exception {
@@ -129,8 +130,7 @@ public class ServerThread extends Thread {
 							}
 						}, 0, 5, TimeUnit.SECONDS);
 
-						// tant qu'il n'a pas le message qui indique que le
-						// client se déconnecte.
+						// tant qu'il n'a pas le message qui indique que le client se déconnecte.
 						/*
 						 * while(Protocole1.decode(tampon) != 0){ tampon =
 						 * in.readLine(); synchronized(o){
