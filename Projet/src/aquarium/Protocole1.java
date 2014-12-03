@@ -19,10 +19,32 @@ public class Protocole1 {
 	 * @param a
 	 * @return
 	 */
-	public static int decoder(String s,long idClient, Aquarium a, boolean server){
+	public static boolean decoder(String s,long idClient, Aquarium a, boolean server){
 		
 		String  messageEntier[] = s.split("#"); 
+		if (messageEntier.length != 0){
+			for(int i =0; i<messageEntier.length;i++){
+				int test = treatCommand(messageEntier[i],idClient,a,server);
+				if (test == -1)
+					return false;
+			}
+			return true;
+		}else{
+			return false;
+		}
 		
+	}
+
+	/**
+	 * Traitement de chaque commande séparément.
+	 * @param s
+	 * @param idClient
+	 * @param a
+	 * @param server
+	 * @return
+	 */
+	private static int treatCommand(String s,long idClient, Aquarium a, boolean server ){
+
 		String contenu [] = s.split("!");
 		String commande = contenu[0];
 
@@ -90,7 +112,7 @@ public class Protocole1 {
 		}
 		return 0;
 	}
-
+	
 	public static String encodeDisconnect(){
 		return "DECONNECT";
 	}
@@ -115,6 +137,53 @@ public class Protocole1 {
 		return "SIZE"+"!"+size;
 	}
 
+	/**
+	 * 
+	 * @param in
+	 * @param aqua
+	 * @param id
+	 * @param server
+	 * @return
+	 */
+	public static boolean receivePositions(BufferedReader in, Aquarium aqua, long id, boolean server){
+		try{
+			String tampon = in.readLine();
+			if(tampon != null){
+				boolean test = decoder(tampon,id,aqua,server);
+				if (test == false)
+					return false;
+				//le serveur envoit à partir de deux listes
+				if(!server){
+					tampon = in.readLine();
+					test = decoder(tampon,id,aqua,server);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	} 
+	
+	/**
+	 * receptionner des classes et les intégrer à l'aquarium.
+	 * @param in
+	 * @param aqua
+	 * @param id
+	 * @return
+	 */
+	public static boolean receptionInit(BufferedReader in,Aquarium aqua, long idClient, boolean server){
+		try{
+			String tampon;
+			tampon = in.readLine();
+			boolean test = decoder(tampon,idClient, aqua, server);
+			return test;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	/**
 	 * envoyer les classes produites dans cet aquarium
 	 * @param out
@@ -153,59 +222,6 @@ public class Protocole1 {
 				String name = ((MobileItem) MobileItems.get(j)).getClasse();
 				out.println(encodeNewFish(0,j,MobileItems.get(j).getWidth(),MobileItems.get(j).getHeight() ,MobileItems.get(j).getPosition().x, MobileItems.get(j).getPosition().y,name));
 				out.flush();
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * receptionner des classes et les intégrer à l'aquarium.
-	 * @param in
-	 * @param aqua
-	 * @param id
-	 * @return
-	 */
-	public static boolean receiveClasses(BufferedReader in,Aquarium aqua, long idClient, boolean server){
-		try{
-			String tampon;
-			tampon = in.readLine();
-			int i = decoder(tampon,idClient, aqua, server);
-			if(i>0){
-				for(int j = 0 ; j < i ; j++){
-					tampon = in.readLine();
-					int k = decoder(tampon,idClient, aqua,server);
-					if(k == -1){
-						throw new Exception();
-					}
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * receptionner des mobiles et les intégrer à l'aquarium.
-	 * @param in
-	 * @param aqua
-	 * @param id
-	 * @return
-	 */
-	public static boolean receiveFishs(BufferedReader in, Aquarium aqua, long id, boolean server){
-		try{
-			String tampon = in.readLine();
-			int i = decoder(tampon,id,aqua,server);
-			for (int j = 0; j < i; j++) {
-				tampon = in.readLine();
-				int k = decoder(tampon,id, aqua,server);
-				if(k == -1){
-					throw new Exception();
-				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -259,6 +275,13 @@ public class Protocole1 {
 		return true;
 	}
 
+	/**
+	 * Envoi les positions des MobileItems créés dans cet aquarium
+	 * @param out
+	 * @param a
+	 * @param id
+	 * @return
+	 */
 	public static boolean sendMyPositions(PrintWriter out, Aquarium a, long id){
 		try{
 			List<List<Long>> mobiles = a.positionsMyFishs();
@@ -276,51 +299,5 @@ public class Protocole1 {
 		}
 		return true;
 	}
-	
-	public static boolean receivePositions(BufferedReader in, Aquarium aqua, long id, boolean server){
-		try{
-			String tampon = in.readLine();
-			System.out.println("receivePositions "+tampon);
-			if(tampon != null){
-				int i = decoder(tampon,id,aqua,server);
-				for (int j = 0; j < i; j++) {
-					tampon = in.readLine();
-					int k = decoder(tampon,id, aqua,server);
-					if(k == -1){
-						throw new Exception();
-					}
-				}
-				
-				//le serveur envoit à partir de deux listes
-				if(!server){
-					tampon = in.readLine();
-					i = decoder(tampon,id,aqua,server);
-					for (int j = 0; j < i; j++) {
-						tampon = in.readLine();
-						int k = decoder(tampon,id, aqua,server);
-						if(k == -1){
-							throw new Exception();
-						}
-					}
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	} 
-	
-	/* traitement par byte[]
-	public static void decodeFishByte(byte input[])	throws UnsupportedEncodingException {
-		String rawInput = new String(input, "UTF-8");
-		String processedInput[] = rawInput.split("!");
-		int i = 0;
-
-		while (i < processedInput.length) {
-			System.out.println(processedInput[i]);
-			i++;
-		}
-	}*/
 
 }

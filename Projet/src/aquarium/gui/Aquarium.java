@@ -115,6 +115,7 @@ public class Aquarium extends JPanel {
 		}
 		for (int i = 0; i < NB_FISH; i++) {
 			AquariumItem ai = new StableFish(items.size()-1);
+			System.out.println(((MobileItem) ai).getClasse());//TMP
 
 			if (ai.sink(items)) {
 				items.add(ai);
@@ -122,7 +123,7 @@ public class Aquarium extends JPanel {
 		}
 		for (int i = 0; i < NB_DORISFISH; i++) {
 			AquariumItem ai = new DorisFish(items.size()-1);
-
+			System.out.println(((MobileItem) ai).getClasse());//TMP
 			if (ai.sink(items)) {
 				items.add(ai);
 			}
@@ -456,27 +457,7 @@ public class Aquarium extends JPanel {
 		return res;
 	}
 	
-	/*
-	public void afficherClass (){
-		Iterator<ElementImage> it = classes.iterator(); 
-		int i = 0;
-		while (it.hasNext()) {
-			ElementImage tmp = it.next();
-			System.out.println("element "+i+" : idclient "+tmp.getidClient()+" nom "+tmp.getNom()+" image "+tmp.getImages());
-			i++;
-		}}*/
-	/*
-	public void afficherMobiles (){
-		Iterator<Mobiles> it = others.iterator(); 
-		int i = 0;
-		while (it.hasNext()) {
-			Mobiles tmp = it.next();
-			System.out.println("element "+i+" : position "+tmp.getPosition().toString()+" nom "+tmp.+" image "+tmp.getImages());
-			i++;
-		}
-	}*/
-	
-	public void checkCollision(void) {
+	public void checkCollision() {
 		Iterator<AquariumItem> itCompareItems = items.iterator();
 		Iterator<AquariumItem> itParseItems = items.iterator();
 		Iterator<Mobiles> itParseOthers = others.iterator();
@@ -488,18 +469,18 @@ public class Aquarium extends JPanel {
 		while (itCompareItems.hasNext()) {
 			tmpAquariumItemCompare = itCompareItems.next();
 			while(itParseItems.hasNext()) {
-				tmpAquariumItemNext = itParseItems.next();
+				tmpAquariumItemParse = itParseItems.next();
 				if (tmpAquariumItemCompare.overlap(tmpAquariumItemParse)) {
 					if (tmpAquariumItemCompare.getClass() == tmpAquariumItemParse.getClass()) {
-						if (itCompareItems.g == "StableFish") {
-							AquariumItem ai = new StableFish();
+						if (tmpAquariumItemCompare.getClasse() == "StableFish") {
+							AquariumItem ai = new StableFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
 
 							if (ai.sink(items)) {
 								items.add(ai);
 							}
 						}
-						else if (tmpAquariumItemCompare.getClass() == "DorisFish") {
-							AquariumItem ai = new DorisFish();
+						else if (tmpAquariumItemCompare.getClasse()== "DorisFish") {
+							AquariumItem ai = new DorisFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
 							
 							if (ai.sink(items)) {
 								items.add(ai);
@@ -508,7 +489,7 @@ public class Aquarium extends JPanel {
 						break;
 					}
 					if (tmpAquariumItemCompare.getClass() != tmpAquariumItemParse.getClass()) {
-						if (tmpAquariumItemCompare.getClass() == "StableFish") {
+						if (tmpAquariumItemCompare.getClasse() == "StableFish") {
 							itParseItems.remove();
 							break;
 						}
@@ -526,18 +507,18 @@ public class Aquarium extends JPanel {
 		while (itCompareItems.hasNext()) {
 			tmpAquariumItemCompare = itCompareItems.next();
 			while(itParseOthers.hasNext()) {
-				tmpAquariumItemNext = itParseOthers.next();
+				tmpMobiles = itParseOthers.next();
 				if (tmpAquariumItemCompare.overlap(tmpMobiles)) {
-					if (tmpAquariumItemCompare.getClass() == tmpMobiles.getClass()) {
-						if (itCompareItems.g == "StableFish") {
-							AquariumItem ai = new StableFish();
+					if (tmpAquariumItemCompare.getClasse() == tmpMobiles.getClasse()) {
+						if (tmpAquariumItemCompare.getClasse() == "StableFish") {
+							AquariumItem ai = new StableFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
 
 							if (ai.sink(items)) {
 								items.add(ai);
 							}
 						}
-						else if (tmpAquariumItemCompare.getClass() == "DorisFish") {
-							AquariumItem ai = new DorisFish();
+						else if (tmpAquariumItemCompare.getClasse() == "DorisFish") {
+							AquariumItem ai = new DorisFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
 							
 							if (ai.sink(items)) {
 								items.add(ai);
@@ -545,8 +526,8 @@ public class Aquarium extends JPanel {
 						}
 						break;
 					}
-					if (tmpAquariumItemCompare.getClass() != tmpMobiles.getClass()) {
-						if (tmpAquariumItemCompare.getClass() == "StableFish") {
+					if (tmpAquariumItemCompare.getClasse() != tmpMobiles.getClasse()) {
+						if (tmpAquariumItemCompare.getClasse() == "StableFish") {
 							itParseOthers.remove();
 							break;
 						}
@@ -560,3 +541,5 @@ public class Aquarium extends JPanel {
 		}
 	}
 }
+
+
