@@ -475,4 +475,88 @@ public class Aquarium extends JPanel {
 			i++;
 		}
 	}*/
+	
+	public void checkCollision(void) {
+		Iterator<AquariumItem> itCompareItems = items.iterator();
+		Iterator<AquariumItem> itParseItems = items.iterator();
+		Iterator<Mobiles> itParseOthers = others.iterator();
+		
+		AquariumItem tmpAquariumItemCompare;
+		AquariumItem tmpAquariumItemParse;
+		Mobiles tmpMobiles;
+
+		while (itCompareItems.hasNext()) {
+			tmpAquariumItemCompare = itCompareItems.next();
+			while(itParseItems.hasNext()) {
+				tmpAquariumItemNext = itParseItems.next();
+				if (tmpAquariumItemCompare.overlap(tmpAquariumItemParse)) {
+					if (tmpAquariumItemCompare.getClass() == tmpAquariumItemParse.getClass()) {
+						if (itCompareItems.g == "StableFish") {
+							AquariumItem ai = new StableFish();
+
+							if (ai.sink(items)) {
+								items.add(ai);
+							}
+						}
+						else if (tmpAquariumItemCompare.getClass() == "DorisFish") {
+							AquariumItem ai = new DorisFish();
+							
+							if (ai.sink(items)) {
+								items.add(ai);
+							}
+						}
+						break;
+					}
+					if (tmpAquariumItemCompare.getClass() != tmpAquariumItemParse.getClass()) {
+						if (tmpAquariumItemCompare.getClass() == "StableFish") {
+							itParseItems.remove();
+							break;
+						}
+						else {
+							itCompareItems.remove();
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		itCompareItems = items.iterator();
+		
+		while (itCompareItems.hasNext()) {
+			tmpAquariumItemCompare = itCompareItems.next();
+			while(itParseOthers.hasNext()) {
+				tmpAquariumItemNext = itParseOthers.next();
+				if (tmpAquariumItemCompare.overlap(tmpMobiles)) {
+					if (tmpAquariumItemCompare.getClass() == tmpMobiles.getClass()) {
+						if (itCompareItems.g == "StableFish") {
+							AquariumItem ai = new StableFish();
+
+							if (ai.sink(items)) {
+								items.add(ai);
+							}
+						}
+						else if (tmpAquariumItemCompare.getClass() == "DorisFish") {
+							AquariumItem ai = new DorisFish();
+							
+							if (ai.sink(items)) {
+								items.add(ai);
+							}
+						}
+						break;
+					}
+					if (tmpAquariumItemCompare.getClass() != tmpMobiles.getClass()) {
+						if (tmpAquariumItemCompare.getClass() == "StableFish") {
+							itParseOthers.remove();
+							break;
+						}
+						else {
+							itCompareItems.remove();
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
 }
