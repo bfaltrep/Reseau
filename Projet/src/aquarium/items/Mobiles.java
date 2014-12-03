@@ -3,24 +3,30 @@ package aquarium.items;
 import java.awt.Point;
 
 public class Mobiles extends AquariumItem {
-	private long id [];
+	private String classe;
+	private long idClient;
+	private long idFish;
 	
-	public Mobiles(long idC, int idP, int width, int height,int x, int y, String clas){
+	public Mobiles(long idC, int idP, int width, int height,int x, int y, String clas, String classe){
 		super(width, clas);
 		super.setPosition(new Point(x,y));
-		id = new long[2];
-		this.id[0] = idC;
-		id[1] = idP;
+		this.idClient = idC;
+		idFish = idP;
+		this.classe = classe;
 	}
 	
 	public long getIdClient(){
-		return id[0];
+		return idClient;
 	}
 	
 	public long getIdPoisson(){
-		return id[1];
+		return idFish;
 	}	
 
+	public String getClasse(){
+		return classe;
+	}	
+	
 	public void move() {
 		double v = getWidth()/getWidth();
 		int dx = (super.getPosition().x - super.getPosition().x);

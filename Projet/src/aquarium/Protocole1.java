@@ -272,7 +272,7 @@ public class Protocole1 {
 				out.println(encodeMoveFish(mobiles.get(i).get(0),mobiles.get(i).get(1),(int)(long) mobiles.get(i).get(2),(int)(long) mobiles.get(i).get(3)));
 		}catch(Exception e){
 			e.printStackTrace();
-			return false;
+			return false;				
 		}
 		return true;
 	}

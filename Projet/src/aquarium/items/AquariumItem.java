@@ -147,6 +147,11 @@ public abstract class AquariumItem {
 		return width;
 	}
 	
+	/**
+	 * @return the String class of the Item
+	 */
+	public abstract String getClasse();
+	
 	public int getHeight() {
 		return height;
 	}
