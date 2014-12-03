@@ -116,7 +116,7 @@ public class Client extends Thread {
 							}
 							send();
 						}
-					}, 0, 100, TimeUnit.MILLISECONDS);
+					}, 0, 5, TimeUnit.SECONDS);
 
 				}
 			});

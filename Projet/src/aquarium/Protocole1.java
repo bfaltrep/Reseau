@@ -14,10 +14,10 @@ public class Protocole1 {
 
 	/**
 	 * Decoder le contenu du string et l'appliquer sur l'aquarium
-	 * @param s
-	 * @param idClient
-	 * @param a
-	 * @return
+	 * @param message
+	 * @param identifiant du client
+	 * @param Aquarium
+	 * @return la réussite des manipulation : si au moins un echec, return false, si tout est réussit retourne true;
 	 */
 	public static boolean decoder(String s,long idClient, Aquarium a, boolean server){
 		
@@ -37,11 +37,14 @@ public class Protocole1 {
 
 	/**
 	 * Traitement de chaque commande séparément.
-	 * @param s
-	 * @param idClient
-	 * @param a
-	 * @param server
-	 * @return
+	 * @param commande
+	 * @param identifiant du client
+	 * @param aquarium
+	 * @param si est le serveur, mettre true, sinon mettre false
+	 * @return un entier indiquant soit : 
+	 * 		- -1 :problème lors de la manipulation
+	 * 		- 0 : la commande n'est pas un size et s'est bien passée
+	 * 		- valeur positive : la commande est un size de cette longueur
 	 */
 	private static int treatCommand(String s,long idClient, Aquarium a, boolean server ){
 
@@ -84,6 +87,7 @@ public class Protocole1 {
 			}
 			break;
 		case "MOVEFISH":
+			System.out.println("TRALALALALALA MOVEFISH : "+Integer.parseInt(contenu[2])+" "+Integer.parseInt(contenu[3])+" "+Integer.parseInt(contenu[4]));
 			//message  : CMD!idClient!idFish!x!y
 			if(server){
 				a.modifySingleClientObj(idClient,
@@ -114,27 +118,27 @@ public class Protocole1 {
 	}
 	
 	public static String encodeDisconnect(){
-		return "DECONNECT";
+		return "DECONNECT#";
 	}
 
 	public static String encodeNewFish(long idClient, long idFish, int width, int height, int x, int y, String nameClass) {
-		return "ADDFISH"+"!"+idClient+"!"+idFish + "!" + width + "!" + height + "!" + x + "!" + y + "!" + nameClass;
+		return "ADDFISH"+"!"+idClient+"!"+idFish + "!" + width + "!" + height + "!" + x + "!" + y + "!" + nameClass+"#";
 	}
 
 	public static String encodeKillFish(long idClient, long idFish){
-		return "REMOVEFISH"+"!"+idClient+"!"+idFish;
+		return "REMOVEFISH"+"!"+idClient+"!"+idFish+"#";
 	}
 
 	public static String encodeMoveFish(long idClient, long idFish, int x, int y){
-		return "MOVEFISH"+"!"+idClient+"!"+idFish+"!"+x+"!"+y;
+		return "MOVEFISH"+"!"+idClient+"!"+idFish+"!"+x+"!"+y+"#";
 	}
 
 	public static String encodeNewClass(String nomClass){
-		return "NEWCLASS"+"!"+nomClass;
+		return "NEWCLASS"+"!"+nomClass+"#";
 	}
 
 	public static String encodeSize(int size){
-		return "SIZE"+"!"+size;
+		return "SIZE"+"!"+size+"#";
 	}
 
 	/**
@@ -176,8 +180,7 @@ public class Protocole1 {
 		try{
 			String tampon;
 			tampon = in.readLine();
-			boolean test = decoder(tampon,idClient, aqua, server);
-			return test;
+			return decoder(tampon,idClient, aqua, server);
 		}catch(Exception e){
 			e.printStackTrace();
 			return false;
@@ -193,7 +196,6 @@ public class Protocole1 {
 	public static boolean sendMyClasses(PrintWriter out, Aquarium aqua, long idPersonnel){
 		try{
 			int total = aqua.nbOfClientClasses(idPersonnel);
-			out.println(encodeSize(total));
 			out.flush();
 			for(int j = 0;j < total;j++){
 				out.println(encodeNewClass(aqua.getClass(j).getNom())); //envoi d'une classe, MODIF après gestion de l'image

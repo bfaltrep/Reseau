@@ -7,7 +7,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,8 +23,9 @@ public class ServerThread extends Thread {
 
 	// gestion des clients
 	private ServerSocket socketserver;
-	private static List<Socket> clients;
-
+	private static Hashtable clients;
+	private static int valeur ;
+	
 	// entrées sorties
 	private PrintWriter out;
 	private BufferedReader in;
@@ -29,7 +33,8 @@ public class ServerThread extends Thread {
 	public ServerThread(int p) throws IOException {
 		socketserver = new ServerSocket(p);
 		aqua = new Aquarium(0);
-		clients = new ArrayList<Socket>();
+		clients = new Hashtable();
+		valeur = 0;
 	}
 
 	public void run() {
@@ -40,7 +45,7 @@ public class ServerThread extends Thread {
 			final ScheduledExecutorService myservice = Executors.newScheduledThreadPool(10);
 			while (!socketserver.isClosed()) {
 				final Socket socket = socketserver.accept(); 
-				clients.add(socket);
+				clients.put(valeur,socket);
 
 				myservice.execute(new Runnable() {
 
@@ -122,7 +127,7 @@ public class ServerThread extends Thread {
 								}
 								send();
 							}
-						}, 0, 100, TimeUnit.MILLISECONDS);
+						}, 0, 5, TimeUnit.SECONDS);
 
 						// tant qu'il n'a pas le message qui indique que le
 						// client se déconnecte.

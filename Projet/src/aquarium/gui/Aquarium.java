@@ -115,7 +115,6 @@ public class Aquarium extends JPanel {
 		}
 		for (int i = 0; i < NB_FISH; i++) {
 			AquariumItem ai = new StableFish(items.size()-1);
-			System.out.println(((MobileItem) ai).getClasse());//TMP
 
 			if (ai.sink(items)) {
 				items.add(ai);
@@ -123,7 +122,6 @@ public class Aquarium extends JPanel {
 		}
 		for (int i = 0; i < NB_DORISFISH; i++) {
 			AquariumItem ai = new DorisFish(items.size()-1);
-			System.out.println(((MobileItem) ai).getClasse());//TMP
 			if (ai.sink(items)) {
 				items.add(ai);
 			}
