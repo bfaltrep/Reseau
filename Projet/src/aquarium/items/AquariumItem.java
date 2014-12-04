@@ -18,12 +18,12 @@ import aquarium.util.RandomNumber;
  * to be extended in order to be instantiated.
  */
 public abstract class AquariumItem {
-
+	
 	/**
 	 * Image representation of the AquariumItem
 	 */
 	private final Image image;
-
+	
 	/**
 	 * Current position of the Aquarium Item in the Aquarium
 	 */
@@ -66,7 +66,7 @@ public abstract class AquariumItem {
 		this.width = (int) (this.width * ratio);
 		this.height = (int) (this.height * ratio);
 	}
-
+	
 	/**
 	 * Draw the Aquarium Item into the graphic component g at its current
 	 * position
@@ -86,7 +86,7 @@ public abstract class AquariumItem {
 	public void setPosition(Point p) {
 		position = p;
 	}
-
+	
 	/**
 	 * @return the current Position of the Aquarium Item
 	 */
@@ -135,8 +135,7 @@ public abstract class AquariumItem {
 	public boolean sink(List<AquariumItem> items) {
 		int nbTries = 0;
 		while (this.intersects(items)) {
-			this.setPosition(RandomNumber.randomPoint(0, Aquarium.getSizeX()
-					- this.width, 0, Aquarium.getSizeY() - this.height));
+			this.setPosition(RandomNumber.randomPoint(0, Aquarium.getSizeX() - this.width, 0, Aquarium.getSizeY() - this.height));
 			nbTries++;
 			if (nbTries > 20)
 				return false;
@@ -147,5 +146,13 @@ public abstract class AquariumItem {
 	public int getWidth() {
 		return width;
 	}
-
+	
+	/**
+	 * @return the String class of the Item
+	 */
+	public abstract String getClasse();
+	
+	public int getHeight() {
+		return height;
+	}
 }

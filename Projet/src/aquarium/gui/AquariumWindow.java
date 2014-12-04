@@ -22,8 +22,6 @@ public class AquariumWindow extends JFrame {
 	 */
 	private final static int MARGIN = 10;
 
-	
-	
 	public AquariumWindow(Aquarium aquarium) {
 		this.aquarium = aquarium;
 	}

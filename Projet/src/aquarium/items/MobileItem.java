@@ -13,14 +13,17 @@ public abstract class MobileItem extends AquariumItem {
 	 */
 	private AquariumItem destination = null;
 
+	private long identifiant;
+	
 	/**
 	 * Constructs a Mobile Item of a given width using the image at imagePath
 	 * 
 	 * @param width
 	 * @param imagePath
 	 */
-	public MobileItem(int width, String imagePath) {
+	public MobileItem(int width, String imagePath, long id) {
 		super(width, imagePath);
+		identifiant = id;
 	}
 
 	/**
@@ -31,8 +34,9 @@ public abstract class MobileItem extends AquariumItem {
 	 * @param maxWidth
 	 * @param imagePath
 	 */
-	public MobileItem(int minWidth, int maxWidth, String imagePath) {
+	public MobileItem(int minWidth, int maxWidth, String imagePath, long id) {
 		super(minWidth, maxWidth, imagePath);
+		identifiant = id;
 	}
 
 	/**
@@ -94,4 +98,13 @@ public abstract class MobileItem extends AquariumItem {
 			destination = getNewTarget(neighbours);
 		move();
 	}
+
+	public long getIdentifiant(){
+		return identifiant;
+	}
+	
+	/**
+	 * @return the String class of the Item
+	 */
+	public abstract String getClasse();
 }

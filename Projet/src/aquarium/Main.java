@@ -1,67 +1,43 @@
 package aquarium;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.HashSet;
-import java.util.Set;
-
-import aquarium.gui.AquariumWindow;
-import aquarium.gui.Aquarium;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Starting point of the Aquarium application
  */
 public class Main  {
 	
-	public static void main(String[] args) throws IOException {
-		if(args[0] == "serveur"){
-			System.out.println("Je suis le serveur");
-			//serveur
-			Aquarium aquarium = new Aquarium();
-			AquariumWindow animation = new AquariumWindow(aquarium);
-			animation.displayOnscreen();
-			
-			
-			//quand nouveau client, alloue une couleur et la transmet aux autres
-		}else{
-			System.out.println("Je suis un client");
-			//client
-			//1 génère l'aquarium et son contenu local
-			Aquarium aquarium = new Aquarium();
-			
-
-			
-			//2 génère ses poissons
-			//3 envoi ses poissons
-			
-		}
-/*
-		AquariumWindow animation = new AquariumWindow(aquarium);
-		animation.displayOnscreen();
-		
-		//gestion multi
-		
-		ServerSocket serveur = new ServerSocket();
-		
-		serveur.setReuseAddress(true);
-		serveur.bind(new InetSocketAddress(8888));
-
-		MonThread mt ;
-		Set set = new HashSet<Socket>();
-		while(true){
-			Socket s = 	serveur.accept();
-			synchronized(set){
-				set.add(s);
+	/**
+	 * 
+	 * @param args : ip et port => si ip est localhost : est le serveur, ouvert au port port. Ouvre un client sur soi-même
+	 * 							=> si ip est autre : est un client et indique à quelle ip se connecter, via quel port
+	 * @throws UnknownHostException 
+	 */
+	public static void main(String[] args) throws UnknownHostException  {
+		try{
+			if(args.length  == 2){
+				if(args[0].matches("localhost")){ // || args[0].matches(InetAddress.getLocalHost().toString())){
+					//serveur
+					System.out.println("Vous êtes un serveur "+InetAddress.getLocalHost()+" "+args[1]);
+	
+					Thread t = new ServerThread(Integer.parseInt(args[1]));
+					t.start();
+	
+				}else{
+					//client
+					System.out.println("vous êtes un client "+args[0]+" "+args[1]);
+					
+					Client c = new Client(Integer.parseInt(args[1]));
+					c.start();
+				}
+			}else{
+				System.out.println("2 arguments expected : Address IP and Port.");
 			}
 			
-			mt = new MonThread(s,set, aquarium);
-			if(mt == null)
-				break;
-			mt.start();
+		}catch(IOException e){
+			e.printStackTrace();
 		}
-		serveur.close();
-*/
 	}
 }

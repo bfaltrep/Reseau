@@ -16,5 +16,10 @@ public class Seaweed extends AquariumItem {
 	public Seaweed(int width) {
 		super(width, img);
 	}
+
+	public String getClasse() {
+		return "Seaweed";
+	}
+	
 	
 }

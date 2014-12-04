@@ -17,5 +17,10 @@ public class Seastone extends AquariumItem {
 		super(width, img);
 	}
 
+	@Override
+	public String getClasse() {
+		return "Seastone";
+	}
+
 	
 }

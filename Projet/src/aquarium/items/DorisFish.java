@@ -8,16 +8,24 @@ public class DorisFish extends StableFish {
 
 	private static final String img = "image/dory.png";
 	
-	public DorisFish() {
-		super(img);
+	public DorisFish(long id) {
+		super(img, id);
 		setBehavior();
 	}
 	
-	public DorisFish(int width) {
-		super(width);
+	public DorisFish(int width, long id) {
+		super(width, id);
 		setBehavior();
 	}
-
+	
+	public String getClasse(){
+		return "DorisFish";
+	}
+	
+	public static String getImageClasse(){
+		return img;
+	}
+	
 	private void setBehavior(){
 		ScheduledExecutorService e = Executors.newScheduledThreadPool(1);
 		e.scheduleWithFixedDelay(new Runnable() {
@@ -27,7 +35,7 @@ public class DorisFish extends StableFish {
 				setTarget(null);
 				
 			}
-		}, 0, 1, TimeUnit.SECONDS);
+		}, 0, 3, TimeUnit.SECONDS);
 	}
 	
 }
