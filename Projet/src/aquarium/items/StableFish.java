@@ -12,16 +12,16 @@ public class StableFish extends MobileItem {
 	private static final String img = "image/fish.png";
 	private AquariumItem target;
 	
-	public StableFish( String img) {
-		super(MIN_WIDTH, MAX_WIDTH, img);
+	public StableFish(String img, long id) {
+		super(MIN_WIDTH, MAX_WIDTH, img, id);
 	}
 	
-	public StableFish() {
-		super(MIN_WIDTH, MAX_WIDTH, img);
+	public StableFish(long id) {
+		super(MIN_WIDTH, MAX_WIDTH, img, id);
 	}
 	
-	public StableFish(int width) {
-		super(width, img);
+	public StableFish(int width, long id) {
+		super(width, img, id);
 	}
 
 	@Override
@@ -36,7 +36,15 @@ public class StableFish extends MobileItem {
 		return MAX_WIDTH;
 	}
 	
-	public String getImage(){
+	public String getClasse(){
+		return "StableFish";
+	}
+	
+	public static String getImageClasse(){
+		return img;
+	}
+	
+	public static String getImage(){
 		return img;
 	}
 
