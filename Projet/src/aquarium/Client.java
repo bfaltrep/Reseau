@@ -88,7 +88,6 @@ public class Client extends Thread {
 							Protocole1.sendMyPositions(out,a,identifiant);
 							
 							//envoyer  ajout / suppression
-							
 						}
 
 						private void receive() throws IOException{
@@ -116,7 +115,7 @@ public class Client extends Thread {
 							}
 							send();
 						}
-					}, 0, 1, TimeUnit.SECONDS);
+					}, 0, 1, TimeUnit.MILLISECONDS);
 
 				}
 			});

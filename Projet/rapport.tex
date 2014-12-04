@@ -49,9 +49,14 @@ Cette classe est une énumération des commandes acceptées par notre protocole.
 
 	Le ServerThread est la classe instancié si l'utilisateur lance un serveur via le main. \\
 	Elle créée les variables nécessaires au contact avec les clients mais aussi à la gestion de l'aquarium initial du serveur. \\
-	Pour s'assurer que le nombre de clients ne posera pas de problèmes durant l'exécution, nous utilisons la classe \textit{ScheduledExecutorService} qui va créer 10 Threads. Ces Threads traiteront les envois et réceptions des sockets des clients, quel que soit leur nombre. 
+	Pour s'assurer que le nombre de clients ne posera pas de problèmes durant l'exécution, nous utilisons la classe \textit{ScheduledExecutorService} qui va créer 10 Threads. Ces Threads traiteront les envois et réceptions des sockets des clients, quel que soit leur nombre. \\
+	
 
+		\textcolor{colortitre3}{\subsection*{Client}}    \addcontentsline{toc}{subsection}{Client}
+	La classe Client est instancié lorsque l'utilisateur demande à se connecter en tant que client à un serveur. C'est une classe qui étend la classe Thread et qui va, elle aussi, utiliser une instance de \textit{ScheduledExecutorService}, mais cette fois avec seulement trois Threads car il n'a qu'un seul contact à traiter.
+		
 		\textcolor{colortitre3}{\subsection*{}}    \addcontentsline{toc}{subsection}{}
+		
 		
 		\textcolor{colortitre3}{\subsection*{Aquarium}}    \addcontentsline{toc}{subsection}{Aquarium}
 \textcolor{colortitre1}{\section*{}} \addcontentsline{toc}{section}{}

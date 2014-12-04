@@ -92,7 +92,7 @@ public class ServerThread extends Thread {
 						myservice.scheduleWithFixedDelay(new Runnable() {
 
 							private void send(int id) {
-								Protocole1.sendMyPositions(out,  aqua,id);
+								Protocole1.sendMyPositions(out, aqua,id);
 								Protocole1.sendPositionsOthers( out, aqua, id);
 
 								//envoyer les modification de l'aquarium : position / ajout / suppression
@@ -129,7 +129,7 @@ public class ServerThread extends Thread {
 									}
 								}
 							}
-						}, 0, 1, TimeUnit.SECONDS);
+						}, 0, 1, TimeUnit.MILLISECONDS);
 
 					}
 				});
