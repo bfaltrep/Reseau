@@ -59,13 +59,13 @@ public class Aquarium extends JPanel {
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
-	private static final int NB_FISH = 3;
+	private static final int NB_FISH = 6;
 
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
-	private static final int NB_DORISFISH = 3;
+	private static final int NB_DORISFISH = 6;
 
 	/**
 	 * Pixel data buffer for the Aquarium rendering
@@ -209,13 +209,13 @@ public class Aquarium extends JPanel {
 		synchronized(oitems){
 			for (AquariumItem aquariumItem : items) {
 				aquariumItem.draw(graphicContext);
-				checkCollision();
 			}
 		}
 		synchronized(oothers){
 			for (AquariumItem aquariumItem : others)
 				aquariumItem.draw(graphicContext);
 		}
+		checkCollision();
 		this.repaint();
 	}
 
@@ -484,19 +484,19 @@ public class Aquarium extends JPanel {
 				if (items.get(i).overlap(items.get(j))) {
 					if (items.get(i).getClasse().equalsIgnoreCase(items.get(j).getClasse())) {
 						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
-							AquariumItem ai = new StableFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
+							AquariumItem ai = new StableFish(items.size()-1);
 
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW STABLEFISH");
+								System.out.println("NEW STABLEFISH1");
 							}
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
-							AquariumItem ai = new DorisFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
+							AquariumItem ai = new DorisFish(items.size()-1);
 							
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW DORISFISH");
+								System.out.println("NEW DORISFISH1");
 							}
 						}
 						break;
@@ -524,19 +524,19 @@ public class Aquarium extends JPanel {
 				if (items.get(i).overlap(others.get(j))) {
 					if (items.get(i).getClasse().equalsIgnoreCase(others.get(j).getClasse())) {
 						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
-							AquariumItem ai = new StableFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
+							AquariumItem ai = new StableFish(items.size()-1);
 
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW STABLEFISH");
+								System.out.println("NEW STABLEFISH2");
 							}
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
-							AquariumItem ai = new DorisFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
+							AquariumItem ai = new DorisFish(items.size()-1);
 							
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW DORISFISH");
+								System.out.println("NEW DORISFISH2");
 							}
 						}
 						break;
