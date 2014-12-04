@@ -203,8 +203,10 @@ public class Aquarium extends JPanel {
 		graphicContext.setColor(backgroundColor);
 		graphicContext.fillRect(0, 0, SIZE_AQUA_X, SIZE_AQUA_Y);
 		synchronized(oitems){
-			for (AquariumItem aquariumItem : items)
+			for (AquariumItem aquariumItem : items) {
 				aquariumItem.draw(graphicContext);
+				checkCollision();
+			}
 		}
 		synchronized(oothers){
 			for (AquariumItem aquariumItem : others)
@@ -456,43 +458,39 @@ public class Aquarium extends JPanel {
 	}
 	
 	public void checkCollision() {
-		Iterator<AquariumItem> itCompareItems = items.iterator();
-		Iterator<AquariumItem> itParseItems = items.iterator();
-		Iterator<Mobiles> itParseOthers = others.iterator();
-		
-		AquariumItem tmpAquariumItemCompare;
-		AquariumItem tmpAquariumItemParse;
-		Mobiles tmpMobiles;
-
-		while (itCompareItems.hasNext()) {
-			tmpAquariumItemCompare = itCompareItems.next();
-			while(itParseItems.hasNext()) {
-				tmpAquariumItemParse = itParseItems.next();
-				if (tmpAquariumItemCompare.overlap(tmpAquariumItemParse)) {
-					if (tmpAquariumItemCompare.getClass() == tmpAquariumItemParse.getClass()) {
-						if (tmpAquariumItemCompare.getClasse() == "StableFish") {
+		for (int i = 0; i < items.size() - 1; i++) {
+			for (int j = i + 1; j < items.size(); j++) {
+				if (items.get(i).overlap(items.get(j))) {
+					if (items.get(i).getClasse().equalsIgnoreCase(items.get(j).getClasse())) {
+						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
 							AquariumItem ai = new StableFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
 
 							if (ai.sink(items)) {
 								items.add(ai);
+								System.out.println("NEW STABLEFISH");
 							}
 						}
-						else if (tmpAquariumItemCompare.getClasse()== "DorisFish") {
+						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
 							AquariumItem ai = new DorisFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
 							
 							if (ai.sink(items)) {
 								items.add(ai);
+								System.out.println("NEW DORISFISH");
 							}
 						}
 						break;
 					}
-					if (tmpAquariumItemCompare.getClass() != tmpAquariumItemParse.getClass()) {
-						if (tmpAquariumItemCompare.getClasse() == "StableFish") {
-							itParseItems.remove();
+					if (!items.get(i).getClasse().equalsIgnoreCase(items.get(j).getClasse())) {
+						System.out.println("HELLO1");
+
+						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
+							items.remove(j);
+							System.out.println("CRUNCH1");
 							break;
 						}
-						else {
-							itCompareItems.remove();
+						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
+							items.remove(i);
+							System.out.println("CRUNCH2");
 							break;
 						}
 					}
@@ -500,37 +498,39 @@ public class Aquarium extends JPanel {
 			}
 		}
 		
-		itCompareItems = items.iterator();
-		
-		while (itCompareItems.hasNext()) {
-			tmpAquariumItemCompare = itCompareItems.next();
-			while(itParseOthers.hasNext()) {
-				tmpMobiles = itParseOthers.next();
-				if (tmpAquariumItemCompare.overlap(tmpMobiles)) {
-					if (tmpAquariumItemCompare.getClasse() == tmpMobiles.getClasse()) {
-						if (tmpAquariumItemCompare.getClasse() == "StableFish") {
+		for (int i = 0; i < items.size() - 1; i++) {
+			for (int j = 0; j < others.size(); j++) {
+				if (items.get(i).overlap(others.get(j))) {
+					if (items.get(i).getClasse().equalsIgnoreCase(others.get(j).getClasse())) {
+						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
 							AquariumItem ai = new StableFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
 
 							if (ai.sink(items)) {
 								items.add(ai);
+								System.out.println("NEW STABLEFISH");
 							}
 						}
-						else if (tmpAquariumItemCompare.getClasse() == "DorisFish") {
+						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
 							AquariumItem ai = new DorisFish(((MobileItem)items.get(items.size()-1)).getIdentifiant());
 							
 							if (ai.sink(items)) {
 								items.add(ai);
+								System.out.println("NEW DORISFISH");
 							}
 						}
 						break;
 					}
-					if (tmpAquariumItemCompare.getClasse() != tmpMobiles.getClasse()) {
-						if (tmpAquariumItemCompare.getClasse() == "StableFish") {
-							itParseOthers.remove();
+					if (!items.get(i).getClasse().equalsIgnoreCase(others.get(j).getClasse())) {
+						System.out.println("HELLO2");
+
+						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
+							others.remove(j);
+							System.out.println("CRUNCH3");
 							break;
 						}
-						else {
-							itCompareItems.remove();
+						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
+							items.remove(i);
+							System.out.println("CRUNCH4");
 							break;
 						}
 					}
