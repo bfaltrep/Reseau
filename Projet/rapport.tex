@@ -41,11 +41,15 @@ Cette classe sert, comme son nom l'indique, au lancement de l'exécution du prog
 		
 		
 		\textcolor{colortitre3}{\subsection*{Constante}} \addcontentsline{toc}{subsection}{Constante} 
-Cette classe est une énumération des commandes acceptées par notre protocole.
+Cette classe est une énumération des commandes acceptées par notre protocole. Elle permet d'assurer la conformité des commandes qui seront passées, mais surtout de rendre le code du protocole plus lisible.
 
-	\textcolor{colortitre2}{\subsection*{Les classes Objets}} \addcontentsline{toc}{subsection}{Les classes Objets} 	
+	\textcolor{colortitre2}{\subsection*{Les classes instanciables}} \addcontentsline{toc}{subsection}{Les classes instanciables} 	
 
 		\textcolor{colortitre3}{\subsection*{ServerThread}}    \addcontentsline{toc}{subsection}{ServerThread}
+
+	Le ServerThread est la classe instancié si l'utilisateur lance un serveur via le main. \\
+	Elle créée les variables nécessaires au contact avec les clients mais aussi à la gestion de l'aquarium initial du serveur. \\
+	Pour s'assurer que le nombre de clients ne posera pas de problèmes durant l'exécution, nous utilisons la classe \textit{ScheduledExecutorService} qui va créer 10 Threads. Ces Threads traiteront les envois et réceptions des sockets des clients, quel que soit leur nombre. 
 
 		\textcolor{colortitre3}{\subsection*{}}    \addcontentsline{toc}{subsection}{}
 		

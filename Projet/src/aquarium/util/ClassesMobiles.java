@@ -13,7 +13,6 @@ public class ClassesMobiles {
 		idClient = idC;
 		imageS = img;
 		image = Toolkit.getDefaultToolkit().createImage(ClassLoader.getSystemResource(img));
-		//ImageIcon icon = new ImageIcon(image); verifier l'utilité
 		nom = n;
 	} 
 	

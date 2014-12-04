@@ -20,10 +20,13 @@ public class Client extends Thread {
 	private int port;
 	private BufferedReader in;
 	private PrintWriter out;
+
+	private long identifiant;
 	//aquarium
 	private Aquarium a ;
-	private long identifiant;
 
+	
+	
 	/**
 	 * constructeur
 	 * @param p port auquel on connecte notre client
@@ -60,14 +63,13 @@ public class Client extends Thread {
 					Protocole1.sendMyClasses(out, a,identifiant);
 
 					//envoi des poissons
-					Protocole1.sendMyFishs(out, a);
+					Protocole1.sendMyFishs(out, a, identifiant);
 
 					//reception des classes des autres
 					Protocole1.receptionInit(in,a, 0,false);
 					
 					//reception des poissons des autres
 					Protocole1.receptionInit( in, a, 0,false);
-
 				}
 				
 				@Override
@@ -78,8 +80,6 @@ public class Client extends Thread {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
-
 					// comportement dans le temps
 					myservice.scheduleWithFixedDelay(new Runnable() {
 
@@ -116,7 +116,7 @@ public class Client extends Thread {
 							}
 							send();
 						}
-					}, 0, 5, TimeUnit.SECONDS);
+					}, 0, 1, TimeUnit.SECONDS);
 
 				}
 			});

@@ -82,14 +82,19 @@ public class Aquarium extends JPanel {
 	private Object oothers;
 	private Object oclasses;
 	
+	
 	/**
-	 * List of Aquarium items to be rendered in the Aquarium
+	 * Lists of Aquarium items to be rendered in the Aquarium
 	 */
 	private List<AquariumItem> items = new ArrayList<AquariumItem>();
 	private List<Mobiles> others = new ArrayList<Mobiles>();	
-
+	
 	private List<ClassesMobiles> classes = new ArrayList<ClassesMobiles>();
 
+	/**
+	 * Constructor
+	 * @param idC my identifiant.
+	 */
 	public Aquarium(long idC) {
 		oitems = new Object();
 		oothers = new Object();
@@ -115,7 +120,6 @@ public class Aquarium extends JPanel {
 		}
 		for (int i = 0; i < NB_FISH; i++) {
 			AquariumItem ai = new StableFish(items.size()-1);
-
 			if (ai.sink(items)) {
 				items.add(ai);
 			}
@@ -215,8 +219,6 @@ public class Aquarium extends JPanel {
 		this.repaint();
 	}
 
-	//methodes de gestion des listes
-	
 	//gestion de items
 	/**
 	 * @return la liste des mobiles dans l'aquarium qui sont créés par cet aquarium
@@ -241,7 +243,6 @@ public class Aquarium extends JPanel {
 	 */
 	public List<List<Long>> positionsMyFishs(){
 		List<List<Long>> res = new ArrayList<List<Long>>();
-		int i=0;
 		synchronized(oitems){
 			Iterator<AquariumItem> it = items.iterator();
 			while (it.hasNext()) {
@@ -249,7 +250,7 @@ public class Aquarium extends JPanel {
 				if (tmp instanceof MobileItem) {
 					Point p = tmp.getPosition();
 					List<Long> element = new ArrayList<Long>();
-					element.add((long)i);
+					element.add(((MobileItem)tmp).getIdentifiant());
 					element.add((long)p.x);
 					element.add((long)p.y);
 					res.add(element);
@@ -260,6 +261,7 @@ public class Aquarium extends JPanel {
 	}
 	
 	//gestion Classes
+	
 	/**
 	 * Ajouter une classe
 	 * @param idC identifiant du client
@@ -273,11 +275,11 @@ public class Aquarium extends JPanel {
 	}
 
 	/**
-	 * Retourne l'élément se trouvant à l'index i dans la liste des éléments
-	 * @param i
-	 * @return
+	 * Retourne l'élément se trouvant à l'index i dans la liste des classes
+	 * @param i l'index de l'élément que l'on veut récupérer
+	 * @return l'élément demandé
 	 */
-	public ClassesMobiles getClass(int i) {
+	public ClassesMobiles getClasse(int i) {
 		synchronized(oclasses){
 			return classes.get(i);
 		}
@@ -325,7 +327,7 @@ public class Aquarium extends JPanel {
 
 	/**
 	 * Supprime toutes les classes d'un client
-	 * @param idClient
+	 * @param idClient l'identifiant du client dont on souhaite supprimer les classes
 	 */
 	public void deleteMultipleClasses(long idClient) {
 		synchronized(oclasses){
@@ -341,8 +343,8 @@ public class Aquarium extends JPanel {
 
 	//gestion Others
 	/**
-	 * Ajoute un objet
-	 * @param m
+	 * Ajoute un Mobile dans la liste de l'aquarium 
+	 * @param m Le Mobiles à ajouter
 	 */
 	public void addObj(Mobiles m) {
 		synchronized(oothers){
@@ -352,38 +354,48 @@ public class Aquarium extends JPanel {
 
 	/**
 	 * Parcoure la liste des objets d'un client et retourne la position de l'objet recherché
-	 * 	 * @param idClient
-	 * @param idPoisson
-	 * @return
+	 * 	 * @param idClient l'identifiant du client dont on souhaite récupérer un Mobiles
+	 * @param idPoisson l'identifiant du Mobiles qui nous intéresse
+	 * @return l'index du Mobiles recherché ou -1 s'il n'a pas été trouvé
 	 */
-	public int browseClientObj(long idClient, int idPoisson) {
+	public Mobiles browseClientObj(long idClient, int idPoisson) {
+		System.out.println("browseClientObj client : "+idClient+" poisson : "+idPoisson);
 		synchronized(oothers){
 			for (int i = 0; i < others.size(); i++) {
+				System.out.println("browseClientObj i "+others.get(i)+" client : "+others.get(i).getIdClient()+" poisson : "+others.get(i).getIdPoisson());
 				if (others.get(i).getIdClient() == idClient && others.get(i).getIdPoisson() == idPoisson) {
-					return i;
+					return others.get(i);
 				}
 			}
 		}
-		return -1;
+		return null;
 	}
 
 	/**
 	 * Supprimer un objet mobiles venant d'un autre client
-	 * @param idClient
-	 * @param idPoisson
+	 * @param idClient l'identifiant du client dont on souhaite supprimer un mobiles
+	 * @param idPoisson l'identifiant du Mobiles qui nous intéresse
 	 */	
 	public void deleteSingleClientObj(long idClient, int idPoisson) {
+		
+		/*
 		int index = browseClientObj(idClient, idPoisson);
 		if (index != -1) {
 			synchronized(oothers){
 				others.remove(index);
 			}
-		}
+		}*/
 	}
 
 	/**
-	 * Retourne l'identifiant et la position de chaque Mobiles n'appartenant pas au client précisé
-	 * @return
+	 * Retourne l'identifiant et la position de chaque Mobiles n'appartenant pas au client précisé.
+	 * Formaté en liste de liste : chaque sous-liste contient les élément du Mobiles formaté :
+	 * 		- idclient
+	 * 		- idMobiles
+	 * 		- axe abscisse : x
+	 * 		- axe ordonné : y
+	 * @param idClient l'identifiant du client dont les Mobiles nous intéressent
+	 * @return une liste contenant les identifiant et les coordonnées de tous les Mobiles d'un client
 	 */
 	public List<List<Long>> positionsClientObj(long idClient){
 		List<List<Long>> res = new ArrayList<List<Long>>();
@@ -400,31 +412,31 @@ public class Aquarium extends JPanel {
 					element.add((long)p.y);
 					res.add(element);
 				}
-			}	
+			}
 		}
 		return res;
 	}
 
 	/**
 	 * Modifier la position d'un poisson venant d'un autre client
-	 * @param idClient
-	 * @param idPoisson
-	 * @param x
-	 * @param y
+	 * @param idClient l'identifiant du client dont les Mobiles nous intéressent
+	 * @param idPoisson L'identifiant du Mobiles à modifier
+	 * @param x la valeur à placer pour l'axe des abscisses
+	 * @param y la valeur à placer pour l'axe des ordonnés
 	 */
 	public void modifySingleClientObj(long idClient, int idPoisson, int x, int y) {
-		int index = browseClientObj(idClient, idPoisson);
-
-		if (index != -1) {
+		Mobiles m = browseClientObj(idClient, idPoisson);
+		System.out.println("modifySingleClientObj  "+m);
+		if (m != null) {
 			synchronized(oothers){
-				others.get(index).setPosition(new Point(x,y));
+				m.setPosition(new Point(x,y));//others.get(index).setPosition(new Point(x,y));
 			}
 		}
 	}
 
 	/**
 	 * Supprime tout les objets appartenant à un client
-	 * @param idClient
+	 * @param idClient Identifiant du client dont on souhaite supprimer les objets
 	 */
 	public void deleteMultipleClientObj(long idClient) {
 		synchronized(oothers){
@@ -438,11 +450,20 @@ public class Aquarium extends JPanel {
 		}
 	}
 
+	/**
+	 * supprime les données retenues pour un client.
+	 * @param idClient identifiant du client dont on souhaite supprimer les données
+	 */
 	public void disconnectClient(long idClient) {
 		deleteMultipleClasses(idClient);
 		deleteMultipleClientObj(idClient);
 	}
 
+	/**
+	 * Recupérer la liste des Mobiles de tous les clients excepté un.
+	 * @param idClient Identifiant du seul client dont on ne souhaite pas avoir les Mobiles
+	 * @return Liste de Mobiles
+	 */
 	public List<Mobiles> getMobilesOthersExceptOne(long idClient){
 		List<Mobiles> res = new ArrayList<Mobiles>();
 		synchronized(oothers){
