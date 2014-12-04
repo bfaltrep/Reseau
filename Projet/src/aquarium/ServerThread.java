@@ -31,7 +31,7 @@ public class ServerThread extends Thread {
 		socketserver = new ServerSocket(p);
 		aqua = new Aquarium(0);
 		clients = new Hashtable<Socket,Integer>();
-		valeur = 0;
+		valeur = 1;
 		o = new Object();
 	}
 
@@ -72,7 +72,7 @@ public class ServerThread extends Thread {
 						Protocole1.sendMyClasses(out, aqua,0);
 
 						//envoi des poissons
-						Protocole1.sendMyFishs(out, aqua);
+						Protocole1.sendMyFishs(out, aqua,0);
 						Protocole1.sendOthersFishes(out, aqua, current);
 
 					}
@@ -118,7 +118,6 @@ public class ServerThread extends Thread {
 								}
 								// réception des positions toutes les secondes
 								try {
-									System.out.println("run boucle serveur "+Thread.currentThread().getId());
 									receive(current);
 									send(current);
 								} catch (IOException e) {
@@ -130,7 +129,7 @@ public class ServerThread extends Thread {
 									}
 								}
 							}
-						}, 0, 5, TimeUnit.SECONDS);
+						}, 0, 1, TimeUnit.SECONDS);
 
 					}
 				});

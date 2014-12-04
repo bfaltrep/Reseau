@@ -14,6 +14,7 @@ public abstract class MobileItem extends AquariumItem {
 	private AquariumItem destination = null;
 
 	private long identifiant;
+	
 	/**
 	 * Constructs a Mobile Item of a given width using the image at imagePath
 	 * 
