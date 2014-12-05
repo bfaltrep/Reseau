@@ -362,7 +362,6 @@ public class Aquarium extends JPanel {
 		System.out.println("browseClientObj client : "+idClient+" poisson : "+idPoisson);
 		synchronized(oothers){
 			for (int i = 0; i < others.size(); i++) {
-				System.out.println("browseClientObj i "+others.get(i)+" client : "+others.get(i).getIdClient()+" poisson : "+others.get(i).getIdPoisson());
 				if (others.get(i).getIdClient() == idClient && others.get(i).getIdPoisson() == idPoisson) {
 					return others.get(i);
 				}
@@ -426,7 +425,6 @@ public class Aquarium extends JPanel {
 	 */
 	public void modifySingleClientObj(long idClient, int idPoisson, int x, int y) {
 		Mobiles m = browseClientObj(idClient, idPoisson);
-		System.out.println("modifySingleClientObj  "+m);
 		if (m != null) {
 			synchronized(oothers){
 				m.setPosition(new Point(x,y));//others.get(index).setPosition(new Point(x,y));
@@ -488,7 +486,6 @@ public class Aquarium extends JPanel {
 
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW STABLEFISH1");
 							}
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
@@ -496,22 +493,18 @@ public class Aquarium extends JPanel {
 							
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW DORISFISH1");
 							}
 						}
 						break;
 					}
 					if (!items.get(i).getClasse().equalsIgnoreCase(items.get(j).getClasse())) {
-						System.out.println("HELLO1");
 
 						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
 							items.remove(j);
-							System.out.println("CRUNCH1");
 							break;
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
 							items.remove(i);
-							System.out.println("CRUNCH2");
 							break;
 						}
 					}
@@ -528,7 +521,6 @@ public class Aquarium extends JPanel {
 
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW STABLEFISH2");
 							}
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
@@ -536,22 +528,18 @@ public class Aquarium extends JPanel {
 							
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW DORISFISH2");
 							}
 						}
 						break;
 					}
 					if (!items.get(i).getClasse().equalsIgnoreCase(others.get(j).getClasse())) {
-						System.out.println("HELLO2");
 
 						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
 							others.remove(j);
-							System.out.println("CRUNCH3");
 							break;
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
 							items.remove(i);
-							System.out.println("CRUNCH4");
 							break;
 						}
 					}
