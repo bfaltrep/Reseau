@@ -40,7 +40,7 @@ public class Client extends Thread {
 
 			//mise en contact avec le serveur
 			socket = new Socket (InetAddress.getLocalHost(),port);
-			System.out.println("demande de connexion ");
+			System.out.println("Demande de connexion ");
 			out = new PrintWriter(socket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -88,6 +88,7 @@ public class Client extends Thread {
 							Protocole1.sendMyPositions(out,a,identifiant);
 							
 							//envoyer  ajout / suppression
+							
 						}
 
 						private void receive() throws IOException{
@@ -115,7 +116,7 @@ public class Client extends Thread {
 							}
 							send();
 						}
-					}, 0, 1, TimeUnit.MILLISECONDS);
+					}, 0, 1, TimeUnit.SECONDS);
 
 				}
 			});

@@ -195,7 +195,7 @@ public class Protocole1 {
 	} 
 	
 	/**
-	 * receptionner un ensemble de classes ou de Mobiles et les intégrer à l'aquarium.
+	 * Receptionner un ensemble de classes ou de Mobiles et les intégrer à l'aquarium.
 	 * @param in Buffer de lecture à partir du bon client
 	 * @param aqua Aquarium contenant les infos a envoyer
 	 * @param idClient identifiant du client qui m'a transmit ces données 
@@ -214,7 +214,7 @@ public class Protocole1 {
 	}
 	
 	/**
-	 * envoyer les classes produites dans cet aquarium
+	 * Envoyer les classes produites dans cet aquarium
 	 * @param out buffer dirigé vers le bon correspondant pour envoyer
 	 * @param aqua Aquarium contenant les infos a envoyer
 	 * @param idPersonnel mon identifiant

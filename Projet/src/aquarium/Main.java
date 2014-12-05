@@ -27,7 +27,7 @@ public class Main  {
 	
 				}else{
 					//client
-					System.out.println("vous êtes un client "+args[0]+" "+args[1]);
+					System.out.println("Vous êtes un client "+args[0]+" "+args[1]);
 					
 					Client c = new Client(Integer.parseInt(args[1]));
 					c.start();

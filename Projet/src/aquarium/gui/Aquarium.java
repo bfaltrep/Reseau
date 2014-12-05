@@ -59,13 +59,13 @@ public class Aquarium extends JPanel {
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
-	private static final int NB_FISH = 6;
+	private static final int NB_FISH = 5;
 
 	/**
 	 * Constant common to all Aquarium instances defining the number of
 	 * "Fish items" to be displayed in the Aquarium
 	 */
-	private static final int NB_DORISFISH = 6;
+	private static final int NB_DORISFISH = 5;
 
 	/**
 	 * Pixel data buffer for the Aquarium rendering
@@ -488,7 +488,6 @@ public class Aquarium extends JPanel {
 
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW STABLEFISH1");
 							}
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
@@ -496,22 +495,18 @@ public class Aquarium extends JPanel {
 							
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW DORISFISH1");
 							}
 						}
 						break;
 					}
 					if (!items.get(i).getClasse().equalsIgnoreCase(items.get(j).getClasse())) {
-						System.out.println("HELLO1");
 
 						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
 							items.remove(j);
-							System.out.println("CRUNCH1");
 							break;
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
 							items.remove(i);
-							System.out.println("CRUNCH2");
 							break;
 						}
 					}
@@ -528,7 +523,6 @@ public class Aquarium extends JPanel {
 
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW STABLEFISH2");
 							}
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
@@ -536,22 +530,18 @@ public class Aquarium extends JPanel {
 							
 							if (ai.sink(items)) {
 								items.add(ai);
-								System.out.println("NEW DORISFISH2");
 							}
 						}
 						break;
 					}
 					if (!items.get(i).getClasse().equalsIgnoreCase(others.get(j).getClasse())) {
-						System.out.println("HELLO2");
 
 						if (items.get(i).getClasse().equalsIgnoreCase("StableFish")) {
 							others.remove(j);
-							System.out.println("CRUNCH3");
 							break;
 						}
 						else if (items.get(i).getClasse().equalsIgnoreCase("DorisFish")) {
 							items.remove(i);
-							System.out.println("CRUNCH4");
 							break;
 						}
 					}
